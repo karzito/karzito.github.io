@@ -2,10 +2,10 @@
 
 <feed xmlns="http://www.w3.org/2005/Atom" >
   <generator uri="https://jekyllrb.com/" version="3.7.4">Jekyll</generator>
-  <link href="https://karzito.github.io/author/karzito/feed.xml" rel="self" type="application/atom+xml" />
+  <link href="https://karzito.github.io/tag/quantum/feed.xml" rel="self" type="application/atom+xml" />
   <link href="https://karzito.github.io/" rel="alternate" type="text/html" />
   <updated>2021-03-08T16:09:06+09:00</updated>
-  <id>https://karzito.github.io/author/karzito/feed.xml</id>
+  <id>https://karzito.github.io/tag/quantum/feed.xml</id>
 
   
   
@@ -108,40 +108,6 @@ Paul Dirac은 양자역학의 창시자 중 한명으로, Paul Dirac notation은
 
       
         <summary type="html">QUANTUM COMPUTING 관련 목차 Quantum bit Linear Algebra with Paul Dirac's representation</summary>
-      
-
-      
-      
-    </entry>
-  
-    <entry>
-      <title type="html">POSTECH ICT V+ 4.0 수업 정리</title>
-      <link href="https://karzito.github.io/ict-class" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 수업 정리" />
-      <published>2020-06-09T01:40:00+09:00</published>
-      <updated>2020-06-09T01:40:00+09:00</updated>
-      <id>https://karzito.github.io/ict-class</id>
-      <content type="html" xml:base="https://karzito.github.io/ict-class">&lt;p&gt;이 글은 마크다운 형식으로 작성하시면 됩니다.&lt;/p&gt;</content>
-
-      
-      
-      
-      
-      
-
-      <author>
-          <name>ChangHyeon Lee</name>
-        
-        
-      </author>
-
-      
-
-      
-        <category term="ict" />
-      
-
-      
-        <summary type="html">이 글은 마크다운 형식으로 작성하시면 됩니다.</summary>
       
 
       
