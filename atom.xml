@@ -8,54 +8,21 @@
     
       
       <item>
-        <title>Quantum Bit</title>
+        <title>POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter</title>
         
-          <description>&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;QUANTUM COMPUTING 관련 목차 &lt;/span&gt;&lt;/p&gt;
+          <description>&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
-    &lt;li&gt;&lt;a href=&quot;./quantum-bit&quot;&gt;Quantum bit&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./quantum-algebra&quot;&gt;Linear Algebra with Paul Dirac's representation&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-development&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 </description>
         
-        <pubDate>Thu, 04 Mar 2021 08:11:00 +0900</pubDate>
+        <pubDate>Wed, 07 Apr 2021 08:11:00 +0900</pubDate>
         <link>
-        https://karzito.github.io/quantum-bit</link>
-        <guid isPermaLink="true">https://karzito.github.io/quantum-bit</guid>
-      </item>
-      
-    
-      
-      <item>
-        <title>Linear Algebra with Paul Dirac's representation</title>
-        
-          <description>&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;QUANTUM COMPUTING 관련 목차 &lt;/span&gt;&lt;/p&gt;
-&lt;ul class=&quot;table-of-contents-list&quot;&gt;
-    &lt;li&gt;&lt;a href=&quot;./quantum-bit&quot;&gt;Quantum bit&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./quantum-algebra&quot;&gt;Linear Algebra with Paul Dirac's representation&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-</description>
-        
-        <pubDate>Thu, 04 Mar 2021 08:11:00 +0900</pubDate>
-        <link>
-        https://karzito.github.io/quantum-algebra</link>
-        <guid isPermaLink="true">https://karzito.github.io/quantum-algebra</guid>
-      </item>
-      
-    
-      
-      <item>
-        <title>[Markdown Tutorial] 마크다운 기본 문법 정리</title>
-        
-          <description>&lt;p&gt;Github blog posting 하는데 필요한 markdown 기본 문법에 대해서 정리할 예정이다. 일단은 당장 필요한 간단한 문법 정도만 정리하고, 추가적으로 필요한 문법들 알아갈때마다 추가적으로 정리하도록 한다.&lt;/p&gt;
-
-</description>
-        
-        <pubDate>Thu, 04 Mar 2021 08:11:00 +0900</pubDate>
-        <link>
-        https://karzito.github.io/markdown-tutorial</link>
-        <guid isPermaLink="true">https://karzito.github.io/markdown-tutorial</guid>
+        https://karzito.github.io/ict-ison-development</link>
+        <guid isPermaLink="true">https://karzito.github.io/ict-ison-development</guid>
       </item>
       
     
@@ -66,12 +33,13 @@
           <description>&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-04 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-development&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 </description>
         
-        <pubDate>Wed, 03 Mar 2021 08:11:00 +0900</pubDate>
+        <pubDate>Wed, 24 Mar 2021 08:11:00 +0900</pubDate>
         <link>
         https://karzito.github.io/ict-ison-meeting</link>
         <guid isPermaLink="true">https://karzito.github.io/ict-ison-meeting</guid>
@@ -85,7 +53,8 @@
           <description>&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-04 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-development&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 </description>
@@ -94,6 +63,21 @@
         <link>
         https://karzito.github.io/ict-ison-meeting</link>
         <guid isPermaLink="true">https://karzito.github.io/ict-ison-meeting</guid>
+      </item>
+      
+    
+      
+      <item>
+        <title>[Markdown Tutorial] 마크다운 기본 문법 정리</title>
+        
+          <description>&lt;p&gt;Github blog posting 하는데 필요한 markdown 기본 문법에 대해서 정리할 예정이다. 일단은 당장 필요한 간단한 문법 정도만 정리하고, 추가적으로 필요한 문법들 알아갈때마다 추가적으로 정리하도록 한다.&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Tue, 02 Mar 2021 08:11:00 +0900</pubDate>
+        <link>
+        https://karzito.github.io/markdown-tutorial</link>
+        <guid isPermaLink="true">https://karzito.github.io/markdown-tutorial</guid>
       </item>
       
     
