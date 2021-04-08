@@ -45,17 +45,43 @@
     
     <!-- This tag outputs SEO meta+structured data and other important settings -->
     <meta name="description" content="ENTERPRISE: ISON" />
-    <link rel="shortcut icon" href="https://karzito.github.io/assets/built/images/favicon.png" type="image/png" />
-    <link rel="canonical" href="https://karzito.github.io/ict-ison-development" />
+    <link rel="shortcut icon" href="http://localhost:4000/assets/built/images/favicon.png" type="image/png" />
+    <link rel="canonical" href="http://localhost:4000/ict-ison-development" />
     <meta name="referrer" content="no-referrer-when-downgrade" />
+
+    
+        <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    TeX: {
+        equationNumbers: {
+        autoNumber: "AMS"
+        }
+    },
+    tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$'] ],
+    processEscapes: true,
+    }
+});
+MathJax.Hub.Register.MessageHook("Math Processing Error",function (message) {
+        alert("Math Processing Error: "+message[1]);
+    });
+MathJax.Hub.Register.MessageHook("TeX Jax - parse error",function (message) {
+        alert("Math Processing Error: "+message[1]);
+    });
+</script>
+<script type="text/javascript" async
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+    
 
      <!--title below is coming from _includes/dynamic_title-->
     <meta property="og:site_name" content="POSTECH ICT V+ 4.0 CLASS" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter" />
-    <meta property="og:description" content="ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter 2021-03-24 ISON Meeting 포스팅에 게재했듯이, 혁신인재 4.0 이스온팀의 개발 목표는 광학 측위 시스템 기반 precision landing 기법을 연구하는 것이다. 해당 목표를 달성하기 위해서 첫번째 세부 개발 목표는 광학 측위 시스템을 활용한 navigation system을 개발하는" />
-    <meta property="og:url" content="https://karzito.github.io/ict-ison-development" />
-    <meta property="og:image" content="https://karzito.github.io/assets/built/images/ictCover.jpg" />
+    <meta property="og:description" content="ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter 2021-03-24 ISON Meeting 포스팅에 게재했듯이, 혁신인재 4.0 이스온팀의 개발 목표는 광학 측위 시스템 기반 precision landing 기법을 연구하는 것이다. 연구를 위한 드론 기체 제작을 위해 주문한 부품 중 일부가 해외 배송 건으로, 도착하는데 시간이" />
+    <meta property="og:url" content="http://localhost:4000/ict-ison-development" />
+    <meta property="og:image" content="http://localhost:4000/assets/built/images/ictCover.jpg" />
     <meta property="article:publisher" content="https://www.facebook.com/" />
     <meta property="article:author" content="https://www.facebook.com/" />
     <meta property="article:published_time" content="2021-04-07T08:11:00+09:00" />
@@ -63,9 +89,9 @@
     <meta property="article:tag" content="Ict" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter" />
-    <meta name="twitter:description" content="ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter 2021-03-24 ISON Meeting 포스팅에 게재했듯이, 혁신인재 4.0 이스온팀의 개발 목표는 광학 측위 시스템 기반 precision landing 기법을 연구하는 것이다. 해당 목표를 달성하기 위해서 첫번째 세부 개발 목표는 광학 측위 시스템을 활용한 navigation system을 개발하는" />
-    <meta name="twitter:url" content="https://karzito.github.io/" />
-    <meta name="twitter:image" content="https://karzito.github.io/assets/built/images/ictCover.jpg" />
+    <meta name="twitter:description" content="ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter 2021-03-24 ISON Meeting 포스팅에 게재했듯이, 혁신인재 4.0 이스온팀의 개발 목표는 광학 측위 시스템 기반 precision landing 기법을 연구하는 것이다. 연구를 위한 드론 기체 제작을 위해 주문한 부품 중 일부가 해외 배송 건으로, 도착하는데 시간이" />
+    <meta name="twitter:url" content="http://localhost:4000/" />
+    <meta name="twitter:image" content="http://localhost:4000/assets/built/images/ictCover.jpg" />
     <meta name="twitter:label1" content="Written by" />
     <meta name="twitter:data1" content="POSTECH ICT V+ 4.0 CLASS" />
     <meta name="twitter:label2" content="Filed under" />
@@ -82,49 +108,22 @@
     "publisher": {
         "@type": "Organization",
         "name": "POSTECH ICT V+ 4.0 CLASS",
-        "logo": "https://karzito.github.io/"
+        "logo": "http://localhost:4000/"
     },
-    "url": "https://karzito.github.io/ict-ison-development",
+    "url": "http://localhost:4000/ict-ison-development",
     "image": {
         "@type": "ImageObject",
-        "url": "https://karzito.github.io/assets/built/images/ictCover.jpg",
+        "url": "http://localhost:4000/assets/built/images/ictCover.jpg",
         "width": 2000,
         "height": 666
     },
     "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "https://karzito.github.io/ict-ison-development"
+        "@id": "http://localhost:4000/ict-ison-development"
     },
-    "description": "ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter 2021-03-24 ISON Meeting 포스팅에 게재했듯이, 혁신인재 4.0 이스온팀의 개발 목표는 광학 측위 시스템 기반 precision landing 기법을 연구하는 것이다. 해당 목표를 달성하기 위해서 첫번째 세부 개발 목표는 광학 측위 시스템을 활용한 navigation system을 개발하는"
+    "description": "ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter 2021-03-24 ISON Meeting 포스팅에 게재했듯이, 혁신인재 4.0 이스온팀의 개발 목표는 광학 측위 시스템 기반 precision landing 기법을 연구하는 것이다. 연구를 위한 드론 기체 제작을 위해 주문한 부품 중 일부가 해외 배송 건으로, 도착하는데 시간이"
 }
     </script>
-
-    
-        <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        TeX: {
-          equationNumbers: {
-            autoNumber: "AMS"
-          }
-        },
-        tex2jax: {
-        inlineMath: [ ['$', '$'] ],
-        displayMath: [ ['$$', '$$'] ],
-        processEscapes: true,
-      }
-    });
-    MathJax.Hub.Register.MessageHook("Math Processing Error",function (message) {
-          alert("Math Processing Error: "+message[1]);
-        });
-    MathJax.Hub.Register.MessageHook("TeX Jax - parse error",function (message) {
-          alert("Math Processing Error: "+message[1]);
-        });
-    </script>
-    <script type="text/javascript" async
-      src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-    </script>
-    
-
 
     <!-- <script type="text/javascript" src="https://demo.ghost.io/public/ghost-sdk.min.js?v=724281a32e"></script>
     <script type="text/javascript">
@@ -154,7 +153,7 @@ into the {body} of the default.hbs template -->
     <div class="site-nav-left">
         
             
-                <a class="site-nav-logo" href="https://karzito.github.io/">POSTECH ICT V+ 4.0 CLASS</a>
+                <a class="site-nav-logo" href="http://localhost:4000/">POSTECH ICT V+ 4.0 CLASS</a>
             
         
         
@@ -162,6 +161,7 @@ into the {body} of the default.hbs template -->
     <li class="nav-home" role="menuitem"><a href="/">Home</a></li>
     <li class="nav-about" role="menuitem"><a href="/about/">About</a></li>
     <li class="nav-ict" role="menuitem"><a href="/tag/ict/">ICT V+ 4.0</a></li>
+    <li class="nav-qCom" role="menuitem"><a href="/tag/quantum/">Quantum Computing</a></li>
     <li class="nav-archive" role="menuitem">
         <a href="/archive.html">All Posts</a>
     </li>
@@ -222,7 +222,7 @@ into the {body} of the default.hbs template -->
     <li><a href="./ict-ison-development">2021-04-07 ISON Development: Error-State Kalman Filter</a></li>
 </ul>
 
-<p>2021-03-24 ISON Meeting 포스팅에 게재했듯이, 혁신인재 4.0 이스온팀의 개발 목표는 <code class="highlighter-rouge">광학 측위 시스템 기반 precision landing</code> 기법을 연구하는 것이다. 해당 목표를 달성하기 위해서 첫번째 세부 개발 목표는 광학 측위 시스템을 활용한 navigation system을 개발하는 것으로, IMU 정보로 부터 계산한 측위 정보와 광학 측위 시스템을 기반으로 측정한 측위 정보를 error-state Kalman filter (ESKF)를 활용하여 fusion하는 알고리즘을 활용한다. 해당 알고리즘은 다음의 논문을 참고하여 구현되었다: <a href="http://www.iri.upc.edu/people/jsola/JoanSola/objectes/notes/kinematics.pdf">Quaternion kinematics for the error-state Kalman filter</a><br /></p>
+<p>2021-03-24 ISON Meeting 포스팅에 게재했듯이, 혁신인재 4.0 이스온팀의 개발 목표는 <code class="highlighter-rouge">광학 측위 시스템 기반 precision landing</code> 기법을 연구하는 것이다. 연구를 위한 드론 기체 제작을 위해 주문한 부품 중 일부가 해외 배송 건으로, 도착하는데 시간이 걸리기 때문에 기체 제작에 앞서 세부 개발 목표 중 하나인 광학 측위 시스템을 활용한 navigation system 개발을 진행하도록 한다. Navigation system 알고리즘은 IMU 정보로 부터 계산한 측위 정보와 광학 측위 시스템을 기반으로 측정한 측위 정보를 error-state Kalman filter (ESKF)를 활용하여 fusion하는 형태로 구현한다. 해당 알고리즘은 다음의 논문을 참고하여 구현되었다: <a href="http://www.iri.upc.edu/people/jsola/JoanSola/objectes/notes/kinematics.pdf">Quaternion kinematics for the error-state Kalman filter</a><br /></p>
 
 <p>본 포스팅에서 ESKF를 설명하기 위해서 true state, nominal state, 그리고 error state 라는 용어를 사용한다. True state는 추정하고자 하는 실제 state를 의미하며, nominal state는 IMU measurement 정보와 system kinematics를 활용하여 예측한 state를 의미한다. Error state는 ESKF에서 추정하는 state로 true state와 nominal state의 차이를 나타낸다.</p>
 
@@ -235,6 +235,13 @@ into the {body} of the default.hbs template -->
 </ol>
 
 <p>글의 목차는 다음과 같이 구성한다.</p>
+
+<ol>
+  <li>Nomenclature</li>
+  <li>ESKF Prediction step</li>
+  <li>ESKF Correction step</li>
+  <li>ESKF Error-state injection and reset</li>
+</ol>
 
 <hr />
 
@@ -348,8 +355,6 @@ into the {body} of the default.hbs template -->
 
 <p>단, $a_{t}$는 inertial frame 기준의 가속도를 나타내며,measured acceleration $a_{m}$은 가속도계에서 측정하는 값이므로 가속도계의 좌표계를 의미한다. 운용하고자 하는 가속도계는 드론 기체에 부착되어 있으므로, 드론 기체에 부착된 body frame 기준의 가속도를 나타낸다고 할 수 있다. $\oplus$는 generic composition을 의미한다. $\otimes$는 quaternion product를 의미한다.</p>
 
-<hr />
-
 <h1 id="2-prediction-step"><strong>2. Prediction step</strong></h1>
 
 <p><br /></p>
@@ -455,6 +460,111 @@ where,</p>
 <p>광학 측위 시스템 기반의 측정값을 이용하여 error-state를 추정하고 이를 nominal state에 injection하여 true state를 추정한다. 광학 측위 시스템을 통해서 얻을 수 있는 measurements는 시스템의 position 및 attitude에 대한 quaternion vector이다.</p>
 
 <h4 id="observation-of-the-error-state-via-filter-correction">Observation of the error state via filter correction</h4>
+<p>Measurements가 아래와 같이 state-dependent function과 zero mean white Gaussian noise의 composition으로 나타난다고 가정하자.</p>
+
+<script type="math/tex; mode=display">\begin{align}
+    \begin{split}
+        y = h(x_{t}) + v
+    \end{split}
+\end{align}</script>
+
+<p>본 과제에서 활용하는 광학 측위 시스템의 경우 inertial frame 기준의 드론 position과 attitude를 측정하기 때문에 measurement function은 $h(x_{t}) = \left[\begin{array}{cc} p_{t} \ q_{t}\end{array}\right]^T$이며, V는 measurement noise covariance를 의미한다.</p>
+
+<p>Error-state에 대한 estimation 및 error covariance matrix는 다음과 같이 갱신한다.
+<script type="math/tex">% <![CDATA[
+\begin{align}
+    \begin{split}
+        K &= PH^T (HPH^T + V)^{-1}   \\
+        \hat{\delta x} &\leftarrow K(y - h(\hat{x_{t}})) \\
+        P &\leftarrow (I-KH)P
+    \end{split}
+\end{align} %]]></script></p>
+
+<p>이 때, $H$는 $h_{x_{t}}$에 대한 Jacobian matrix를 의미한다.</p>
+
+<script type="math/tex; mode=display">\begin{align}
+    \begin{split}
+        H \equiv \left. \frac{\partial h}{\partial \delta x} \right\rvert_{x}
+    \end{split}
+\end{align}</script>
+
+<h4 id="jacobian-computation-for-the-filter-correction">Jacobian computation for the filter correction</h4>
+<p>Jacobian matrix $H$는 아래와 같이 chain rule을 활용하여 구할 수 있다.</p>
+
+<script type="math/tex; mode=display">\begin{align}
+    \begin{split}
+        H \triangleq \left. \frac{\partial h}{\partial \delta x} \right\rvert_{x} = \left. \frac{\partial h}{\partial x_{t}} \right\rvert_{x} \left. \frac{\partial x_{t}}{\partial \delta x} \right\rvert_{x} = H_{x}X_{\delta x}
+    \end{split}
+\end{align}</script>
+
+<p>Measurements는 position $p$와 quaternion $q$이기 때문에, $H_{x}$를 구하는 것은 trivial하다. $X_{\delta x}$는 정의에 따라 다음과 같이 얻을 수 있다.</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+    \begin{split}
+        X_{\delta x} \triangleq \left. \frac{\partial x_{t}}{\partial \delta x} \right\rvert_{x} = \left[\begin{array}{ccccccccc} 
+        I_{6\times 6} & 0 & 0 \\
+        0 & Q_{\delta \theta} & 0 \\
+        0 & 0 & I_{6\times 6} \end{array}\right]
+    \end{split}
+\end{align} %]]></script>
+
+<p>이 때, $Q_{\delta \theta} = \partial(q\otimes \delta q) / \partial \delta \theta$를 의미하며, $\delta \theta$가 매우 작다고 가정하면 다음과 같이 구할 수 있다.</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+    \begin{split}
+        Q_{\delta \theta} = \frac{1}{2} \left[\begin{array}{cccccccccccc}
+        -q_{x} & -q_{y} & -q_{z} \\
+        q_{w} & -q_{z} & q_{y} \\
+        q_{z} & q_{w} & -q_{x} \\
+        -q_{y} & q_{x} & q_{w} \end{array}\right]
+    \end{split}
+\end{align} %]]></script>
+
+<h4 id="injection-of-the-observed-error-into-the-nominal-state">Injection of the observed error into the nominal state</h4>
+<p>Nominal state는 estimated error-state를 이용하여 update할 수 있다.</p>
+
+<script type="math/tex; mode=display">\begin{align}
+    \begin{split}
+        p \leftarrow p + \hat{\delta p} \\
+        v \leftarrow v + \hat{\delta v} \\
+        q \leftarrow q \otimes q\{\hat{\delta \theta}\}  \\
+        a_{b} \leftarrow a_{b} + \hat{\delta a_{b}} \\
+        \omega_{b} \leftarrow \omega_{b} + \hat{\delta \omega_{b}}  \\
+        g \leftarrow g + \hat{\delta g}
+    \end{split}
+\end{align}</script>
+
+<h1 id="4-eskf-reset"><strong>4. ESKF reset</strong></h1>
+<p>Error state의 초기화는 다음과 같은 형태로 이루어진다.</p>
+
+<script type="math/tex; mode=display">\begin{align}
+    \begin{split}
+        \delta x = \delta x \ominus \hat{\delta x}
+    \end{split}
+\end{align}</script>
+
+<p>따라서 이에 대한 ESKF reset operation은 다음과 같이 나타난다.</p>
+
+<script type="math/tex; mode=display">\begin{align}
+    \begin{split}
+        \hat{\delta x} \leftarrow 0 \\
+        P \leftarrow GPG^T
+    \end{split}
+\end{align}</script>
+
+<p>이 때, G는 아래와 같이 정의된 Jacobian matrix를 의미한다.</p>
+
+<script type="math/tex; mode=display">\begin{align}
+    \begin{split}
+        G \triangleq \left. \frac{\partial g}{\partial \delta x} \right\rvert_{\hat{\delta x}}
+    \end{split}
+\end{align}</script>
+
+<hr />
+
+<p>다음 포스팅은 해당 알고리즘에 대한 c 코드 작성에 대한 내용을 담을 예정이다. 이 후, 드론 기체 제작에 필요한 부품들이 모두 도착하면 기체를 제작하고 알고리즘 검증과 관련된 내용을 진행하도록 한다.</p>
 
                 </div>
             </section>
@@ -527,6 +637,8 @@ where,</p>
                                   
                                 
                                   
+                                
+                                  
                                     
                                         
                                         
@@ -542,8 +654,6 @@ where,</p>
                                             <li><a href="/ict-ison-meeting">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-03-02 미팅 요약</a></li>
                                         
                                     
-                                  
-                                
                                   
                                 
                             </ul>
@@ -566,24 +676,18 @@ where,</p>
             
                 
 
-    <article class="post-card post-template">
+    <article class="post-card ">
         
-            <a class="post-card-image-link" href="/ict-ison-meeting">
-                <div class="post-card-image" style="background-image: url(/assets/built/images/ictCover.jpg)"></div>
+            <a class="post-card-image-link" href="/markdown-tutorial">
+                <div class="post-card-image" style="background-image: url(/assets/built/images/writing.jpg)"></div>
             </a>
         
         <div class="post-card-content">
-            <a class="post-card-content-link" href="/ict-ison-meeting">
+            <a class="post-card-content-link" href="/markdown-tutorial">
                 <header class="post-card-header">
                     
-                        
-                            
-                                <span class="post-card-tags">Ict</span>
-                            
-                        
-                    
 
-                    <h2 class="post-card-title">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-03-24 미팅 요약</h2>
+                    <h2 class="post-card-title">[Markdown Tutorial] 마크다운 기본 문법 정리</h2>
                 </header>
                 <section class="post-card-excerpt">
                     
@@ -621,7 +725,7 @@ where,</p>
 <!-- Floating header which appears on-scroll, included from includes/floating-header.hbs -->
 <div class="floating-header">
     <div class="floating-header-logo">
-        <a href="https://karzito.github.io/">
+        <a href="http://localhost:4000/">
             
             <span>POSTECH ICT V+ 4.0 CLASS</span>
         </a>
@@ -663,7 +767,7 @@ where,</p>
         <!-- The footer at the very bottom of the screen -->
         <footer class="site-footer outer">
             <div class="site-footer-content inner">
-                <section class="copyright"><a href="https://karzito.github.io/">POSTECH ICT V+ 4.0 CLASS</a> &copy; 2021</section>
+                <section class="copyright"><a href="http://localhost:4000/">POSTECH ICT V+ 4.0 CLASS</a> &copy; 2021</section>
                 <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> &
                     <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a> using
                     <a href="https://github.com/jekyller/jasper2" target="_blank" rel="noopener">Jasper2</a></section>
