@@ -1,9 +1,680 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-04-21T17:21:55+09:00</updated><id>http://localhost:4000/</id><title type="html">POSTECH ICT V+ 4.0 CLASS</title><subtitle>ENTERPRISE: ISON</subtitle><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_2</title><link href="http://localhost:4000/ict-ison-eskf2" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_2" /><published>2021-04-21T08:11:00+09:00</published><updated>2021-04-21T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-eskf2</id><content type="html" xml:base="http://localhost:4000/ict-ison-eskf2">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-05-25T16:52:30+09:00</updated><id>http://localhost:4000/</id><title type="html">POSTECH ICT V+ 4.0 CLASS</title><subtitle>ENTERPRISE: ISON</subtitle><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design</title><link href="http://localhost:4000/ict-ison-ctrlr" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design" /><published>2021-05-11T08:11:00+09:00</published><updated>2021-05-11T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-ctrlr</id><content type="html" xml:base="http://localhost:4000/ict-ison-ctrlr">&lt;h1 id=&quot;13주차-드론-동역학-및-제어기-설계-1-210510210521&quot;&gt;13주차, 드론 동역학 및 제어기 설계 1 (21.05.10~21.05.21)&lt;/h1&gt;
+
+&lt;p&gt;이번 13주차에서는 아래 추진일정에 따라 모션캡쳐 시스템을 활용한 드론 인식 및 측위 기술 개발에 관련한 내용을 포스팅한다.&lt;/p&gt;
+
+&lt;p&gt;지난 11주차 포스팅에서 드론 H/W를 제작하였다. 이제는 제작한 드론을 제어하기 위한 제어 S/W가 드론에 탑재되어야 한다. 드론 동역학 설명을 시작으로 드론 FC (Flight Controller)에 탑재될 제어기가 왜 이렇게 구성되었는지에 대한 내용을 전달한다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Ctrlr/Schedule.png&quot; alt=&quot;schedule&quot; /&gt;
+&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;드론 동역학
+    &lt;ul&gt;
+      &lt;li&gt;목표: 드론 동역학 이해&lt;/li&gt;
+      &lt;li&gt;목적: 드론 동역학을 이해함으로써, 각 로터의 회전을 이용해 기체좌표계 그리고 나아가 관성좌표계에서 동체의 Position과 angle을 찾아내는 것에 그 목적이 있다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;드론이라고 하면 손쉽게 떠올릴 수 있는 쿼드로터는 4개의 로터로 구동되는 방식의 UAV (Unmanned Aerial Vehicle) 이다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Ctrlr/Drone.png&quot; alt=&quot;drone&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;(1) 좌표계 정의&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;가장 먼저 드론 동역학을 이해하기 위해서 관성좌표계와 기체좌표계를 아래와 같이 정의한다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Ctrlr/Coordinate.png&quot; alt=&quot;coordinate&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;관성좌표계에서 표현되는 드론의 위치와 관성좌표계에서 바라본 기체좌표계의 오일러 회전 각은 아래와 같이 $p,\eta$ 로 표현할 수 있다.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;p=\begin{bmatrix}
+x\\
+y\\
+z
+\end{bmatrix},
+\eta=\begin{bmatrix}
+\phi\\
+\theta\\
+\psi
+\end{bmatrix}&lt;/script&gt;
+
+&lt;p&gt;기체좌표계에서 축 방향으로의 선속도와 좌표축에 대한 각 속도는 아래와 같이 $v_B,\omega$로 표현 가능하다.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;v_B=\begin{bmatrix}
+v_x\\
+v_y\\
+v_z
+\end{bmatrix},
+\omega=\begin{bmatrix}
+\omega_x\\
+\omega_y\\
+\omega_z
+\end{bmatrix}&lt;/script&gt;
+
+&lt;p&gt;여기서 명심해야 할 것은 $p,\eta$ 은 관성좌표계에서 정의 된 성분이고, $v_B,\omega$는 기체좌표계에서 정의된 성분이라는 것이다.&lt;/p&gt;
+
+&lt;p&gt;기체좌표계에서 관성좌표계로의 회전 변환은 아래와 같이 표현할 수 있다.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+R = {R_z}(\psi ){R_y}(\theta ){R_x}(\phi ) = \begin{bmatrix}{\cos \theta \cos \psi }&amp;{\sin \phi \sin \theta \cos \psi  - \cos \phi \sin \psi }&amp;{\cos \phi \sin \theta \cos \psi  + \sin \phi \sin \psi }\\{\cos \theta \sin \psi }&amp;{\sin \phi \sin \theta \sin \psi  - \cos \phi \cos \psi }&amp;{\cos \phi \sin \theta \sin \psi  - \sin \phi \cos \psi }\\{ - \sin \theta }&amp;{\sin \phi \cos \theta }&amp;{\cos \phi \cos \theta }\end{bmatrix} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;여기서, ${R_z}(\psi ),{R_y}(\theta ),{R_x}(\phi)$는 아래와 같다.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+{R_x}(\phi ) =  {\begin{bmatrix}1&amp;0&amp;0\\0&amp;{\cos \phi }&amp;{ - \sin \phi }\\0&amp;{\sin \phi }&amp;{\cos \phi }\end{bmatrix}},{R_y}(\theta ) = {\begin{bmatrix}{\cos \theta }&amp;0&amp;{\sin \theta }\\0&amp;1&amp;0\\{ - \sin \theta }&amp;0&amp;{\cos \theta }\end{bmatrix}} ,\\{R_z}(\psi ) =  {\begin{bmatrix}{\cos \psi }&amp;{ - \sin \psi }&amp;0\\{\sin \psi }&amp;{\cos \psi }&amp;0\\0&amp;0&amp;1\end{bmatrix}} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;회전 변환 행렬  $R$은 Orthogonal 하기 때문에, $R^{-1}=R^T$이고 이는 관성좌표계에서 기체좌표계로의 회전변환이 될 수 있다.&lt;/p&gt;
+
+&lt;p&gt;관성좌표계에서의 각속도는 $C$ matrix를 이용하여 기체좌표계로 변환할 수 있다.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\dot \eta  = {C^{ - 1}}\omega, \\c= {\begin{bmatrix}
+1&amp;0&amp;{ - \sin \theta }\\
+0&amp;{\cos \phi }&amp;{\cos \theta \sin \phi }\\
+0&amp;{ - \sin \phi }&amp;{\cos \theta \cos \phi }
+\end{bmatrix}}, \\c^{-1}= {\begin{bmatrix}
+1&amp;{\sin \phi \tan \theta }&amp;{\cos \phi \tan \theta }\\
+0&amp;{\cos \phi }&amp;{ - \sin \phi }\\
+0&amp;{\frac{\sin \phi }{\cos \theta }}&amp;{\frac{\cos \phi }{\cos \theta }}
+\end{bmatrix}} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;&lt;strong&gt;(2) 드론에서 발생 가능한 힘&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;쿼드콥터 타입의 드론은 symmetric한 구조로 가정되기 때문에 Inertia matrix는 아래와 같이 표현한다.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+I =  {\begin{bmatrix}{I_{xx}}&amp;0&amp;0\\0&amp;{I_{zz}}&amp;0\\0&amp;0&amp;{I_{zz}}\end{bmatrix}} ,{I_{xx}} = {I_{yy}} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;로터의 각속도를 $\omega_i$라고 하고, 로터의 회전에 의해서 발생하는 로터 축으로의 추력을 $f_i$라고 하자.&lt;/p&gt;
+
+&lt;p&gt;로터의 각속도와 로터 축으로의 추력은 아래와 같은관계가 있다. 여기서 $k$는 &lt;em&gt;lift constant&lt;/em&gt;이다.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;{f_i} = k{\omega _i}^2&lt;/script&gt;
+
+&lt;p&gt;또 로터축으로 발생되는 토크 ${\tau _{M_i}}$와는 아래와 같은 관계가 있으며, $I_M$은 로터의 관성모멘트이고, $b$는 &lt;em&gt;drag constant&lt;/em&gt;이다.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\tau _{M_i} = b{\omega _i}^2 + {I_M}\mathop {\omega _i}&lt;/script&gt;
+
+&lt;p&gt;로터가 생성하는 추력의 총합은 아래와 같다.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;T = \sum\limits_{i = 1}^4 {f_i} = k \sum\limits_{i = 1}^4 {\omega _i}&lt;/script&gt;
+
+&lt;p&gt;로터가 생성하는 추력은 드론의 구조상 항상 기체좌표계의 $z-axis$ 방향으로 작용한다.&lt;/p&gt;
+
+&lt;p&gt;따라서 기체좌표계에서 드론의 추력은 $T^B$라고 표기하며 아래와 같이 표현할 수 있다.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;{T^B} =  {\begin{bmatrix}0\\0\\T\end{bmatrix}}&lt;/script&gt;
+
+&lt;p&gt;또한, 기체에서 발생하는 토크 $\tau^B$는 기체좌표계를  각 축에 따라서  $\tau_{x},\tau_{y},\tau_{z}$성분이 있으며, 아래와 같이 정의할 수 있다.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;{\tau ^B} =  {\begin{bmatrix}{\tau _x }\\{\tau _y }\\{\tau _z}\end{bmatrix}}  =  {\begin{bmatrix}{lk( - {w_2}^2 + {w_4}^2)}\\{lk( - {w_1}^2 + {w_3}^2)}\\{\sum\limits_{i = 1}^4 {\tau _{M_i}} }\end{bmatrix}}&lt;/script&gt;
+
+&lt;p&gt;여기서 주의해야 할 것은, $\tau_{x},\tau_{y},\tau_{z}$가 기체좌표계에서 기체좌표계의 축을 따라 정의한 토크라는 것이다.&lt;/p&gt;
+
+&lt;p&gt;$l$은 로터와 드론 Mass center까지의 거리이고, $k$는 lift constant이다.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;(3) Newton-Euler equation&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;드론은 강체 역학으로 해석할 수 있으며, 따라서 드론의 동역학을 &lt;strong&gt;Newton-Euler equation&lt;/strong&gt;으로 해석할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;기체좌표계에서 질량을 가속하기위한 힘 $m\dot{v_B}$과 기체의 원심력 (Centrifugal Force) $\omega \times(mv_B)$은 중력에의한 힘$R^Tg=R^{-1}g$과 기체에서 발생하는 추력 $T_B$와 같다.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;m \mathop {v_B}\limits^.  + \omega  \times (m{v_B}) = m{R^T}g + {T_B}&lt;/script&gt;
+
+&lt;p&gt;여기서 원심력 $\omega \times(mv_B)$은 가상의 힘이므로 무시한다.&lt;/p&gt;
+
+&lt;p&gt;따라서 위의 식은 관성좌표계에서 아래와 같이 표현 할 수 있다.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;m\mathop p\limits^{ \cdot  \cdot }  = g + R{T_B},{\begin{bmatrix}{\mathop x\limits^{ \cdot  \cdot } }\\{\mathop y\limits^{ \cdot  \cdot } }\\{\mathop z\limits^{ \cdot  \cdot } }\end{bmatrix}}  = {\begin{bmatrix}0\\0\\{ - 9.81}\end{bmatrix}}  + \frac{T}{m} {\begin{bmatrix}{\cos \phi \sin \theta \cos \psi  + \sin \phi \sin \psi }\\{\cos \phi \sin \theta \sin \psi  - \sin \phi \cos \psi }\\{\cos \phi \cos \theta }\end{bmatrix}}&lt;/script&gt;
+
+&lt;p&gt;여기서 &lt;script type=&quot;math/tex&quot;&gt;{\begin{bmatrix}{\cos \phi \sin \theta \cos \psi  + \sin \phi \sin \psi } \\ {\cos \phi \sin \theta \sin \psi  - \sin \phi \cos \psi } \\ {\cos \phi \cos \theta }\end{bmatrix}}&lt;/script&gt; 는 드론에서 발생하는 추력이 $z-axis$성분만 존재하므로 $R$ 에서 $z-axis$ 성분에 대한 벡터이다.&lt;/p&gt;
+
+&lt;p&gt;또 기체좌표계에서 관성모멘트의 가속과 구심력 (Centripetal Force) $\omega \times(I\omega)$ ,Gyroscophic force $\Gamma$는 외부에서 작용하는 토크 &lt;script type=&quot;math/tex&quot;&gt;\tau={\begin{bmatrix}{\tau_x/I_{xx}}\\{\tau_y /I_{yy}}\\{\tau_z/I_{zz}}\end{bmatrix}}&lt;/script&gt;와 동일하다. 이는 아래와 같이 표현이 .&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;I\dot{\omega}+\omega\times(I\omega)+\Gamma=\tau&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\dot \omega  = {I^{ - 1}}( - \left[ {\begin{bmatrix}{\omega _x}\\{\omega _y}\\{\omega _z}\end{bmatrix}} \right] \times \left[ {\begin{bmatrix}{I_{xx} \omega _x }\\{I_{yy} \omega _y}\\{I_{zz}\omega _z}\end{bmatrix}} \right] - {I_r}\left[ {\begin{bmatrix}{\omega _x}\\{\omega _y}\\{\omega _z}\end{bmatrix}} \right] \times \left[ {\begin{bmatrix}0\\0\\1\end{bmatrix}} \right]{\omega _T} + \tau )&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;{\begin{bmatrix}{\mathop {{\omega _x}}\limits^. }\\{\mathop {{\omega _y}}\limits^. }\\{\mathop {{\omega _z}}\limits^. }\end{bmatrix}}  =  {\begin{bmatrix}{({I_{xx}} - {I_{yy}}){\omega _y}{\omega _z}/{I_{xx}}}\\{({I_{xx}} - {I_{yy}}){\omega _x}{\omega _z}/{I_{yy}}}\\{({I_{xx}} - {I_{yy}}){\omega _x}{\omega _y}/{I_{zz}}}\end{bmatrix}} - {I_r} {\begin{bmatrix}{{\omega _x}/{I_{xx}}}\\{ - {\omega _y}/{I_{yy}}}\\0\end{bmatrix}} {\omega _T} +  {\begin{bmatrix}{{\tau _x}/{I_{xx}}}\\{{\tau _y}/{I_{yy}}}\\{{\tau _z}/{I_{zz}}}\end{bmatrix}}&lt;/script&gt;
+
+&lt;p&gt;여기서 $\omega_T=\omega_1-\omega_2+\omega_3-\omega_4$ 이다.&lt;/p&gt;
+
+&lt;p&gt;여기까지 우리는 기체좌표계에서의 각 가속도를 표현할 수 있게 되었다.  여기서 우리는 $\dot{\eta}=C^{-1}\omega$인 것을 알고있다. 따라서 관성좌표계에서의 각 가속도는 아래와 같이 표현할 수 있다.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\mathop \eta \limits^{ \cdot  \cdot }  = \frac{d}{{dt}}({C^{ - 1}}\omega ) = \frac{d}{{dt}}({C^{ - 1}})\omega  + {C^{ - 1}}\dot \omega \\
+\\= {\begin{bmatrix}
+0&amp;{\dot \phi \cos \phi \tan \theta  + \dot \theta \sin \phi /{{\cos }^2}\theta }&amp;{ - \dot \phi \sin \phi \cos \theta  + \dot \theta \cos \phi /{{\cos }^2}\theta }\\
+0&amp;{ - \dot \phi \sin \phi }&amp;{ - \dot \phi \cos \phi }\\
+0&amp;{\dot \phi \cos \phi /\cos \theta  + \dot \phi \sin \phi \tan \theta /\cos \theta }&amp;{\dot \phi \sin \phi /\cos \theta  + \dot \phi \cos \phi \tan \theta /\cos \theta }
+\end{bmatrix}} \omega  + {C^{ - 1}}\dot \omega %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;(3) Simulation&lt;/p&gt;
+
+&lt;p&gt;(2)까지 우리는 드론의 동역학을 이해해 보았다. 따라서, 로터에서 발생하는 회전에 따라서 드론이 관성좌표계 그리고 기체좌표계에서 어떤 거동을 보일지를 수식적으로 해석할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;이후, Matlab에서 각 로터의 회전에 대한 시뮬레이션 툴을 개발하였다.&lt;/p&gt;
+
+&lt;video width=&quot;480&quot; height=&quot;320&quot; controls=&quot;controls&quot;&gt;
+  &lt;source src=&quot;assets\built\images\Ctrlr\Simulation.mp4&quot; type=&quot;video/mp4&quot; /&gt;
+&lt;/video&gt;
+
+&lt;div class=&quot;language-matlab highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;%% Written by Sungkwan Kim, CoCEL, POSTECH&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;%% Hardware parameter&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.468&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;g&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;9.81&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Ixx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;4.856&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Iyy&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;4.856&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Izz&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;8.801&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.225&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;2.980&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1.14&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;%% Speed and thrust of each rotor&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;omega&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1.8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;%1.075 %시스템 입력&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;speed&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;omega&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sqrt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;dspeed&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.05&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;speed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;speed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;speed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;speed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega4&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;speed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thrust1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thrust2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thrust3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thrust4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;%% Initial state&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;%Initial position and velocity&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;x0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;y0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;z0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;vx0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;vy0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;vz0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+	
+&lt;span class=&quot;c1&quot;&gt;%Initial euler angles and rates&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;phi0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;theta0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;psi0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;phidot0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;thetadot0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;psidot0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;%% Solving Derivative Eq&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;tspan&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;linspace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Z0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x0&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y0&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;z0&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;phi0&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;theta0&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;psi0&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vx0&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vy0&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vz0&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;phidot0&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thetadot0&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;psidot0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;odeset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'abstol'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'reltol'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;ode45&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tspan&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Z0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;figure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;hold&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;legend&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'x'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'y'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'z'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'$\phi$'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'$\theta$'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'$\psi$'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'$\dot{x}$'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'$\dot{y}$'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'$\dot{z}$'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'$\dot{\phi}$'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'$\dot{\theta}$'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'$\dot{\psi}$'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Interpreter'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'latex'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Fontsize'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;figure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;hold&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;positions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;angles&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;animate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;positions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;angles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Zdot&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Ixx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Ixx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Iyy&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Iyy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Izz&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Izz&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;g&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;g&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;omega1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;omega2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;omega3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;omega4&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;force1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;force2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;force3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;force4&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;F_z&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;omega2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;omega3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;omega4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;tau_x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;omega2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;tau_y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;omega1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;tau_z&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;omega2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;omega3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;omega4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;z&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;%p&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;phi&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;theta&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;psi&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;%eta&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;vx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vy&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vz&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;%p_dot&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;phidot&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thetadot&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;psidot&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;%eta_dot&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;sphi&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;cphi&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;stht&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;theta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ctht&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;theta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;spsi&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;psi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;cpsi&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;psi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;R&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cpsi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ctht&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cpsi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stht&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sphi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;spsi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cphi&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cpsi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stht&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cphi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;spsi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sphi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;	
+     &lt;span class=&quot;n&quot;&gt;spsi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ctht&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;spsi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stht&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sphi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cpsi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cphi&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;spsi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stht&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cphi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cpsi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sphi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;	
+     &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stht&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;ctht&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sphi&lt;/span&gt;                &lt;span class=&quot;n&quot;&gt;ctht&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cphi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;C&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;     &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stht&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+     &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cphi&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;sphi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ctht&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+     &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sphi&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cphi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ctht&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+ 
+&lt;span class=&quot;n&quot;&gt;C_dot&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;             &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thetadot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ctht&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+         &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phidot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sphi&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;phidot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cphi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ctht&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thetadot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sphi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stht&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+         &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phidot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cphi&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phidot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sphi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ctht&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thetadot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cphi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stht&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;xdotdot&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cphi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stht&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cpsi&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sphi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;spsi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;F_z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ydotdot&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cphi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stht&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;spsi&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sphi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cpsi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;F_z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;zdotdot&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cphi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ctht&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;F_z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;g&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;phidotdot&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Iyy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Izz&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thetadot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;psidot&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tau_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Ixx&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;thetadotdot&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Izz&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Ixx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phidot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;psidot&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tau_y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Iyy&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;psidotdot&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Ixx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Iyy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phidot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thetadot&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tau_z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Izz&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;%본래 X는&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;%'$\dot{x}$','$\dot{y}$','$\dot{z}$','$\dot{\phi}$','$\dot{\theta}$','$\dot{\psi}$'를&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;%포함하고 있음&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;%결국 X(1)~X(2)까지는 p2dot과 eta2dot이 들어가야함&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Zdot&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vx&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vy&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vz&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;phidot&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thetadot&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;psidot&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;xdotdot&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ydotdot&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;zdotdot&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;phidotdot&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thetadotdot&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;psidotdot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt; 
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;animate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;positions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;angles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;axle_x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+               &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;axle_y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+              &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;dmax&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;positions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;%radius of propellers&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ang&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;linspace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;pi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;x_circle&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ang&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;y_circle&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ang&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;z_circle&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;zeros&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ang&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;propeller&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x_circle&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;',y_circle'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;z_circle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+
+    &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;q1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;propeller&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;q2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;axle_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;angles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ii&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mm&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;positions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ii&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;positions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ii&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;z&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;positions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ii&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;phi&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;angles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ii&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; 
+        &lt;span class=&quot;n&quot;&gt;theta&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;angles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ii&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;psi&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;angles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ii&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;R&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get_rotation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;theta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;psi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p2&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;r_body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;axle_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,:)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;r_world&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;R&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r_body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;new_axle_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,:)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r_world&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;new_axle_x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_axle_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p2&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;r_body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;axle_y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,:)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;r_world&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;R&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r_body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;new_axle_y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,:)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r_world&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;new_axle_y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_axle_y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;r_body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;propeller&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,:)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;r_world&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;R&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r_body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;new_propeller&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,:)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r_world&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;new_propeller1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new_axle_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,:)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new_propeller&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;new_propeller3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new_axle_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,:)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new_propeller&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;new_propeller2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new_axle_y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,:)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new_propeller&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;new_propeller4&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new_axle_y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,:)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new_propeller&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+         &lt;span class=&quot;nb&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_axle_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_axle_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_axle_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Linewidth'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;hold&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+         &lt;span class=&quot;nb&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_axle_y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_axle_y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_axle_y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Linewidth'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;patch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_propeller1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_propeller1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_propeller1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'r'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;patch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_propeller2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_propeller2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_propeller2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'g'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;patch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_propeller3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_propeller3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_propeller3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'b'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;patch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_propeller4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_propeller4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_propeller4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'c'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;axis&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dmax&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dmax&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dmax&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dmax&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dmax&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dmax&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;xlabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'x'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;ylabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'y'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;zlabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'z'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;%view(0,90)&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;view&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;pause&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.01&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ii&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;clf&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;R&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get_rotation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;theta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;psi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;%%%%%%% uses 3-2-1 euler angles&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;R_x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;    &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;...&lt;/span&gt;
+           &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;  &lt;span class=&quot;nb&quot;&gt;cos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;...&lt;/span&gt;
+           &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;  &lt;span class=&quot;nb&quot;&gt;sin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)];&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;R_y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;theta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;   &lt;span class=&quot;nb&quot;&gt;sin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;theta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;...&lt;/span&gt;
+           &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;           &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;         &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;...&lt;/span&gt;
+          &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;theta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;   &lt;span class=&quot;nb&quot;&gt;cos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;theta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)];&lt;/span&gt; 
+
+    &lt;span class=&quot;n&quot;&gt;R_z&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;psi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;psi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;...&lt;/span&gt;
+           &lt;span class=&quot;nb&quot;&gt;sin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;psi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;nb&quot;&gt;cos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;psi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;...&lt;/span&gt;
+           &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;           &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;  
+    &lt;span class=&quot;n&quot;&gt;R&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;R_z&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;R_y&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;R_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">13주차, 드론 동역학 및 제어기 설계 1 (21.05.10~21.05.21)</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-26 Drone System Implementation</title><link href="http://localhost:4000/ict-ison-imp" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-26 Drone System Implementation" /><published>2021-04-27T08:11:00+09:00</published><updated>2021-04-27T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-imp</id><content type="html" xml:base="http://localhost:4000/ict-ison-imp">&lt;h1 id=&quot;11주차-드론-제작210426210507&quot;&gt;11주차, 드론 제작(21.04.26~21.05.07)&lt;/h1&gt;
+
+&lt;p&gt;드론 부품이 모두 도착하여 ICT V4.0 과제 목표인 드론 스테이션 충전 패드 소형화 연구를 위한 드론 제작에 돌입하였다. 필요한 물품은 아래와 같다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;ESC 4개&lt;/li&gt;
+  &lt;li&gt;Power Distribution Module&lt;/li&gt;
+  &lt;li&gt;Brushless Motor (CW 2, CCW 2)&lt;/li&gt;
+  &lt;li&gt;드론 프레임 (3D 프린팅)&lt;/li&gt;
+  &lt;li&gt;Flight Controller (FC)&lt;/li&gt;
+  &lt;li&gt;배터리&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;ESC (Aikon AK32 35A 4S)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.notion.so/b4a260327dd94f239c1c183d4b2fbaf2&quot;&gt;AK32 35A 4S specifications&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;AK32 35A 4S은 서보모터를 제어하기 위한 ESC(Electronic Speed Controller)로  48MHz에서 STM-32F-0 Cortex M0를 사용하는 ESC를 제어하기 위한 Firmware BLHeli32 가 다운로드 되어있으며, 48KHz까지 PWM 신호 생성이 가능하다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;AK32 35A 4S의 실물 사진&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Power Distribution Board (PDB-XT60)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;LiPo 배터리의 전원을 ESC 공급하기 위한 PDB (Power Distribution Board)로 카메라나 LED 등을 연결하여 쉽게 사용할 수 있도록 12V 및 5V를 쓸 수 있는 BEC (Battery Eliminator circuit)도 탑재되어 있다. 일종의 Regulator라고 생각하면 된다.&lt;/p&gt;
+
+&lt;p&gt;입력 배터리를 4S을 연결할 경우 출력 전압은 아래와 같다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 1.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;입력 배터리를 3S를 연결할 경우 출력 전압은 아래와 같다. 우리의 경우 3S LiPo 배터리를 사용할 예정이므로 Output Voltage는 LiPo voltage -1V로 기대할 수 있다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 2.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 3.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;PDB-XT60 실물사진&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 4.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;사용하는 ESC인 Aikon AK32 35A 4S와 결선은 위와 같이 이루어지며 편의상 위를 바라보고 있는 ESC를 0번 ESC라고 하겠다.&lt;/p&gt;
+
+&lt;p&gt;PDB-XT60을 통해서 배터리로부터 입력 받은 전압을 분배하여,  각 ESC로 인가한다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Motor&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;드론의 추력을 만들어 내기 위한 Motor는 4X Racerstar Racing Edition 1806 BR1806 2280KV 1-3S Brushless Motor로 선정하였다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 5.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;빨간색 캡 - CCW,  검은색 캡 - CW&lt;/p&gt;
+
+&lt;p&gt;모터의 Specification은 아래와 같다. 이중 우리가 사용할 모터는 2280KV 모델이다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 6.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Description:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Brand: Racerstar&lt;/p&gt;
+
+&lt;p&gt;Item name: BR1806 2280KV Brushless Motor&lt;/p&gt;
+
+&lt;p&gt;RPM/V: 2280KV&lt;/p&gt;
+
+&lt;p&gt;Height: 26mm&lt;/p&gt;
+
+&lt;p&gt;Width: 23mm&lt;/p&gt;
+
+&lt;p&gt;Shaft diameter: M5&lt;/p&gt;
+
+&lt;p&gt;Motor mount hole size: M2&lt;/p&gt;
+
+&lt;p&gt;Weight: 20 grams&lt;/p&gt;
+
+&lt;p&gt;Voltage: 1-3S&lt;/p&gt;
+
+&lt;p&gt;Battery: 1-3S lithium polymer&lt;/p&gt;
+
+&lt;p&gt;Internal resistance: Ω&lt;/p&gt;
+
+&lt;p&gt;Usage: for 250 260 Multirotor Frame Kit&lt;/p&gt;
+
+&lt;p&gt;CW screw thread motor comes with red cap&lt;/p&gt;
+
+&lt;p&gt;CCW screw thread motor comes with black cap&lt;/p&gt;
+
+&lt;p&gt;Brushless Motor모터는 다상 교류에 의한 회전자계에 의해서 회전한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://mblogthumb-phinf.pstatic.net/MjAxODA3MTlfMjY5/MDAxNTMxOTgwMTE3OTAz.GYwGRHPxudvpefV1N340-qSrsJhYeAFW25pDoOhpu4wg.1I8atoTi_6q0UmrUsvGDVSICP_OQHCHnxGVdbnHszUAg.GIF.paynoh/img03_dc_motor_120.gif?type=w2&quot; alt=&quot;https://mblogthumb-phinf.pstatic.net/MjAxODA3MTlfMjY5/MDAxNTMxOTgwMTE3OTAz.GYwGRHPxudvpefV1N340-qSrsJhYeAFW25pDoOhpu4wg.1I8atoTi_6q0UmrUsvGDVSICP_OQHCHnxGVdbnHszUAg.GIF.paynoh/img03_dc_motor_120.gif?type=w2&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;주황색 화살표가 모터의 회전이라고 생각하면 된다.&lt;/p&gt;
+
+&lt;p&gt;모터는 다음과 같이 인버터와 연결이 되고, 제어 명령에 따라서 모터를 회전 시킬 수 있다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 7.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://m.blog.naver.com/paynoh/221322336204&quot;&gt;https://m.blog.naver.com/paynoh/221322336204&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;전류 제어용 인버터의 단순도는 아래와 같다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 8.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://m.blog.naver.com/paynoh/221322336204&quot;&gt;https://m.blog.naver.com/paynoh/221322336204&lt;/a&gt;
+&lt;a href=&quot;http://motioncontrol.co.kr/default/news/?nwsid=n3&amp;amp;uid=9870&quot;&gt;http://motioncontrol.co.kr/default/news/?nwsid=n3&amp;amp;uid=9870&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;위와 같은 브릿지 회로를 이용하여 모터의 회전자계를 발생시켜서 모터를 제어한다.  스위칭 속도는 모터의 속도를 결정하고, 전류의 세기는 모터의 토크를 결정 짓는다.&lt;/p&gt;
+
+&lt;p&gt;ESC는 위의 전류 제어용 인버터의 역할에서 나타난 회전자계 발생을 담당한다. FC에서 ESC로 RPM 명령을 보내면 해당 RPM에 맞추어 회전자계를 발생시켜 모터의 회전을 만든다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 9.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://ev-engineer-student.tistory.com/38&quot;&gt;https://ev-engineer-student.tistory.com/38&lt;/a&gt;
+&lt;a href=&quot;https://m.blog.naver.com/PostView.nhn?blogId=lagrange0115&amp;amp;logNo=220611637281&amp;amp;proxyReferer=https:%2F%2Fwww.google.com%2F&quot;&gt;https://m.blog.naver.com/PostView.nhn?blogId=lagrange0115&amp;amp;logNo=220611637281&amp;amp;proxyReferer=https:%2F%2Fwww.google.com%2F&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;간단한 RL circuit 전동기는 아래와 같다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 10.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://x-engineer.org/graduate-engineering/electronics/circuits/rl-circuit-detailed-mathematical-analysis/&quot;&gt;https://x-engineer.org/graduate-engineering/electronics/circuits/rl-circuit-detailed-mathematical-analysis/&lt;/a&gt;
+&lt;a href=&quot;https://ctms.engin.umich.edu/CTMS/index.php?example=MotorSpeed&amp;amp;section=SystemModeling&quot;&gt;https://ctms.engin.umich.edu/CTMS/index.php?example=MotorSpeed&amp;amp;section=SystemModeling&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;KVL(the sum of the electrical voltage across the loop is zero)을 적용한 폐회로의 전압방정식은 $V=Ri+L{di \over dt}+E$ 이다. 여기서 $V$는 입력 전압 $E$는 역기전력이다.&lt;/p&gt;
+
+&lt;p&gt;모터에서 발생하는 토크는 $T=J{dw\over dt}+bw+T_L$ 이고, $w$는 모터의 회전속도이고 $T_L$은 부하토크이다.&lt;/p&gt;
+
+&lt;p&gt;여기서 $E=k_ew_m,T=k_ti$이고, $k_e$는 역기전력 상수, $k_t$는 모터 토크 상수 이다.&lt;/p&gt;
+
+&lt;p&gt;여기서 부하토크 $T_L$을 무시하고, $i, w, \theta$를 상태변수로 하는 상태공간 방정식을 세우면 아래와 같다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 11.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://ktword.co.kr/abbr_view.php?m_temp1=5975&quot;&gt;http://ktword.co.kr/abbr_view.php?m_temp1=5975&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;출력을 속도로하여 아래와 같이 설정하면&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 12.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;아래와 같은 전동기 구동시스템의 블록선도를 그릴 수 있다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 13.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://m.blog.naver.com/PostView.nhn?blogId=hebojago84&amp;amp;logNo=30150331023&amp;amp;proxyReferer=https:%2F%2Fwww.google.com%2F&quot;&gt;https://m.blog.naver.com/PostView.nhn?blogId=hebojago84&amp;amp;logNo=30150331023&amp;amp;proxyReferer=https:%2F%2Fwww.google.com%2F&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;전동기 구동시스템의 블록선도를 시스템 $G(s)$로 하여 다음과 같은 PID 제어기를 이용한 전동기 제어기를 구현할 수 있다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 14.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.google.com/search?q=motor+%EC%A0%9C%EC%96%B4%EA%B8%B0+%EB%B8%94%EB%A1%9D%EC%84%A0%EB%8F%84&amp;amp;tbm=isch&amp;amp;ved=2ahUKEwjWzvyk763wAhUBA6YKHV2cDkoQ2-cCegQIABAA&amp;amp;oq=motor+%EC%A0%9C%EC%96%B4%EA%B8%B0+%EB%B8%94%EB%A1%9D%EC%84%A0%EB%8F%84&amp;amp;gs_lcp=CgNpbWcQAzoHCCMQ6gIQJzoICAAQsQMQgwE6BQgAELEDOgIIADoECCMQJzoECAAQAzoECAAQHjoGCAAQCBAeUJqNClji3gpgl-AKaA1wAHgDgAF_iAHmG5IBBDQuMjmYAQCgAQGqAQtnd3Mtd2l6LWltZ7ABCsABAQ&amp;amp;sclient=img&amp;amp;ei=WhyQYNa5C4GGmAXduLrQBA&amp;amp;bih=937&amp;amp;biw=1920&amp;amp;hl=ko#imgrc=Op8ALVCKj4TkvM&quot;&gt;https://www.google.com/search?q=motor+제어기+블록선도&amp;amp;tbm=isch&amp;amp;ved=2ahUKEwjWzvyk763wAhUBA6YKHV2cDkoQ2-cCegQIABAA&amp;amp;oq=motor+제어기+블록선도&amp;amp;gs_lcp=CgNpbWcQAzoHCCMQ6gIQJzoICAAQsQMQgwE6BQgAELEDOgIIADoECCMQJzoECAAQAzoECAAQHjoGCAAQCBAeUJqNClji3gpgl-AKaA1wAHgDgAF_iAHmG5IBBDQuMjmYAQCgAQGqAQtnd3Mtd2l6LWltZ7ABCsABAQ&amp;amp;sclient=img&amp;amp;ei=WhyQYNa5C4GGmAXduLrQBA&amp;amp;bih=937&amp;amp;biw=1920&amp;amp;hl=ko#imgrc=Op8ALVCKj4TkvM&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;위와 같은 모터 제어 시스템을 설명한 이유는 추후 있을 드론 제어기 설계에 대한 이해를 돕기 위함이다. 우리는 여기서 Reference $r$을 드론의 위치 $x,y,z$와 yaw $\psi$를 입력으로 하여, ESC에 명령하기 위한 RPM을 출력으로 하는 제어기를 설계할 예정이다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;드론 프레임&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;FC와 ESC, 모터, PDB가 고정될 드론의 Body는 아래와 같이 모델링하여 3D 프린터로 출력하였다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 15.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;FC와 PDB를 보호할 커버는 다음과 같이 모델링 하여 3D 프린터로 출력하였다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 16.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;프로펠러를 보호할 가드는 아래와 같이 모델링하여 출력하였다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 17.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;FC&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;ARM Cortex M7을 CPU로 탑재한 ST사의 STM32H743IIT6  마이크로프로세서를 이용하여 FC를 구성하였다.&lt;/p&gt;
+
+&lt;p&gt;Datasheet:&lt;a href=&quot;https://datasheetspdf.com/pdf/1337528/STMicroelectronics/STM32H743II/1&quot;&gt;https://datasheetspdf.com/pdf/1337528/STMicroelectronics/STM32H743II/1&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;센서 및 기타 칩셋&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;ICM-20602 (3-axis gyroscope, 3-axis accelerometer, SPI)&lt;/li&gt;
+  &lt;li&gt;MMC5883MA (3-axis magnetic sensor, I2C)&lt;/li&gt;
+  &lt;li&gt;LPS33HW (Barometor, SPI)&lt;/li&gt;
+  &lt;li&gt;FT230X SSOP (USB 2.0 Uart Interface)&lt;/li&gt;
+  &lt;li&gt;E01 ML01SP4 (2.4ghz Wireless Commuication, SPI)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 18.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;위의 칩셋과 마이크로프로세서를 인터페이스 하여 Inertial Navigation에 필요한 정보를 수집하고 Ground Control Station (GCS)과 통신이 가능하도록 구성하였다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;배터리 (PT-B2200N-SP35)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;배터리는 3S, 11.1V, 45C+를 선정하였다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 19.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;아래는 해당 배터리의 Specification 이다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 20.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;제작&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;다음은 1~6에서 설명한 드론 제작용 부품을 이용하여 남땜, 조립하는 과정이다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 21.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;가장 먼저 3S LiPo 배터리와 연결할 PDB-XT60의 배터리 단자를 납땜하였다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 22.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;이후 PDB-XT60을 3D 프린터로 출력한 드론 바디에 연결하였다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 23.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;이후 ESC에 전원선을 납땜하고, ESC의 T를 모두 STM32H743IIT6의 PB8 (RX)와 연결하고 각 S를 PA8~11(GPIO out)로 연결하여 DShot1200 프로토콜을 이용한 FC-ESC 간 통신을 준비한다. 이후 ESC의 ABC 상을 모터와 연결한다. 이때, CW 모터에는 ESC의 ABC out을 모터의 ABC in에 맞추어 연결하고, CCW 모터에는 ESC의 ABC중 B와 C를 교차하여 모터의 ABC in에 연결한다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 24.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;이후 모션 캡쳐 시스템에서의 측위를 위해, 반사 마커를 추가하였다. 드론은 Symmetric한 구조이기 때문에, 중앙부에 방향을 구별하기 위한 마커를 추가하여 총 5개의 마커를 사용하였다.&lt;/p&gt;
+
+&lt;p&gt;다음 포스팅에서는 아래 연구개발 일정에 따라서 드론 비행을 위한 제어기와 동역학적 이해에 대한 포스팅이 추가될 예정이다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Imp/Untitled 25.png&quot; alt=&quot;untitled&quot; /&gt;
+&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">11주차, 드론 제작(21.04.26~21.05.07)</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_2</title><link href="http://localhost:4000/ict-ison-eskf2" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_2" /><published>2021-04-21T08:11:00+09:00</published><updated>2021-04-21T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-eskf2</id><content type="html" xml:base="http://localhost:4000/ict-ison-eskf2">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf1&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf2&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_2&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-imp&quot;&gt;2021-04-26 ISON Development: Drone System Implementation&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrl&quot;&gt;2021-05-10 ISON Development: Drone Control&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;본 포스팅에서는 지난 시간에 정리한 &lt;code class=&quot;highlighter-rouge&quot;&gt;Error-State Kalman Filter&lt;/code&gt;의 process 및 measurement noise matrices 계수 설정, 구현 코드 관련된 내용을 작성하고자 한다.&lt;/p&gt;
@@ -283,12 +954,14 @@ where,&lt;/p&gt;
 //	ins-&amp;gt;x[6] = ins-&amp;gt;x[6]/qNorm; ins-&amp;gt;x[7] = ins-&amp;gt;x[7]/qNorm; ins-&amp;gt;x[8] = ins-&amp;gt;x[8]/qNorm; ins-&amp;gt;x[9] = ins-&amp;gt;x[9]/qNorm;
 &lt;/span&gt;	&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_1</title><link href="http://localhost:4000/ict-ison-eskf1" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_1" /><published>2021-04-07T08:11:00+09:00</published><updated>2021-04-07T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-eskf1</id><content type="html" xml:base="http://localhost:4000/ict-ison-eskf1">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_1</title><link href="http://localhost:4000/ict-ison-eskf1" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_1" /><published>2021-04-07T08:11:00+09:00</published><updated>2021-04-07T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-eskf1</id><content type="html" xml:base="http://localhost:4000/ict-ison-eskf1">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf1&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf2&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_2&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-imp&quot;&gt;2021-04-26 ISON Development: Drone System Implementation&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrl&quot;&gt;2021-05-10 ISON Development: Drone Control&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;2021-03-24 ISON Meeting 포스팅에 게재했듯이, 혁신인재 4.0 이스온팀의 개발 목표는 &lt;code class=&quot;highlighter-rouge&quot;&gt;광학 측위 시스템 기반 precision landing&lt;/code&gt; 기법을 연구하는 것이다. 연구를 위한 드론 기체 제작을 위해 주문한 부품 중 일부가 해외 배송 건으로, 도착하는데 시간이 걸리기 때문에 기체 제작에 앞서 세부 개발 목표 중 하나인 광학 측위 시스템을 활용한 navigation system 개발을 진행하도록 한다. Navigation system 알고리즘은 IMU 정보로 부터 계산한 측위 정보와 광학 측위 시스템을 기반으로 측정한 측위 정보를 error-state Kalman filter (ESKF)를 활용하여 fusion하는 형태로 구현한다. 해당 알고리즘은 다음의 논문을 참고하여 구현되었다: &lt;a href=&quot;http://www.iri.upc.edu/people/jsola/JoanSola/objectes/notes/kinematics.pdf&quot;&gt;Quaternion kinematics for the error-state Kalman filter&lt;/a&gt;&lt;br /&gt;&lt;/p&gt;
@@ -633,7 +1306,7 @@ where,&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;다음 포스팅은 해당 알고리즘에 대한 c 코드 작성에 대한 내용을 담을 예정이다. 이 후, 드론 기체 제작에 필요한 부품들이 모두 도착하면 기체를 제작하고 알고리즘 검증과 관련된 내용을 진행하도록 한다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2</summary></entry><entry><title type="html">[Markdown Tutorial] 마크다운 기본 문법 정리</title><link href="http://localhost:4000/markdown-tutorial" rel="alternate" type="text/html" title="[Markdown Tutorial] 마크다운 기본 문법 정리" /><published>2021-03-04T08:11:00+09:00</published><updated>2021-03-04T08:11:00+09:00</updated><id>http://localhost:4000/markdown-tutorial</id><content type="html" xml:base="http://localhost:4000/markdown-tutorial">&lt;p&gt;Github blog posting 하는데 필요한 markdown 기본 문법에 대해서 정리할 예정이다. 일단은 당장 필요한 간단한 문법 정도만 정리하고, 추가적으로 필요한 문법들 알아갈때마다 추가적으로 정리하도록 한다.&lt;/p&gt;
+&lt;p&gt;다음 포스팅은 해당 알고리즘에 대한 c 코드 작성에 대한 내용을 담을 예정이다. 이 후, 드론 기체 제작에 필요한 부품들이 모두 도착하면 기체를 제작하고 알고리즘 검증과 관련된 내용을 진행하도록 한다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control</summary></entry><entry><title type="html">[Markdown Tutorial] 마크다운 기본 문법 정리</title><link href="http://localhost:4000/markdown-tutorial" rel="alternate" type="text/html" title="[Markdown Tutorial] 마크다운 기본 문법 정리" /><published>2021-03-04T08:11:00+09:00</published><updated>2021-03-04T08:11:00+09:00</updated><id>http://localhost:4000/markdown-tutorial</id><content type="html" xml:base="http://localhost:4000/markdown-tutorial">&lt;p&gt;Github blog posting 하는데 필요한 markdown 기본 문법에 대해서 정리할 예정이다. 일단은 당장 필요한 간단한 문법 정도만 정리하고, 추가적으로 필요한 문법들 알아갈때마다 추가적으로 정리하도록 한다.&lt;/p&gt;
 
 &lt;p&gt;아래의 글은 마크다운 관련 포스팅을 참고하여 필요한 부분을 정리하였으며, 참조링크는 문서 하단에 표기하였다.&lt;/p&gt;
 
@@ -886,6 +1559,8 @@ HEROPY Tech님 마크다운 문법 포스팅: &lt;a href=&quot;https://heropy.bl
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf1&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf2&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_2&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-imp&quot;&gt;2021-04-26 ISON Development: Drone System Implementation&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrl&quot;&gt;2021-05-10 ISON Development: Drone Control&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;hr /&gt;
@@ -930,12 +1605,14 @@ HEROPY Tech님 마크다운 문법 포스팅: &lt;a href=&quot;https://heropy.bl
 
 &lt;p&gt;추후 개발된 경로를 추종을 위해 cascade 형태의 PID 제어기를 활용하여 경로 추종 제어기를 구성할 예정이다.&lt;/p&gt;
 
-&lt;p&gt;관련 미팅 내용은 이와 같았으며, 1차 개발 세부 목표인 측위 시스템을 활용한 드론 인식 기술 개발을 진행하도록 한다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-03-02 미팅 요약</title><link href="http://localhost:4000/ict-ison-meeting" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-03-02 미팅 요약" /><published>2021-03-03T08:11:00+09:00</published><updated>2021-03-03T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-meeting</id><content type="html" xml:base="http://localhost:4000/ict-ison-meeting">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;관련 미팅 내용은 이와 같았으며, 1차 개발 세부 목표인 측위 시스템을 활용한 드론 인식 기술 개발을 진행하도록 한다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-03-02 미팅 요약</title><link href="http://localhost:4000/ict-ison-meeting" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-03-02 미팅 요약" /><published>2021-03-03T08:11:00+09:00</published><updated>2021-03-03T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-meeting</id><content type="html" xml:base="http://localhost:4000/ict-ison-meeting">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf1&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf2&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_2&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-imp&quot;&gt;2021-04-26 ISON Development: Drone System Implementation&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrl&quot;&gt;2021-05-10 ISON Development: Drone Control&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;hr /&gt;
@@ -964,4 +1641,4 @@ HEROPY Tech님 마크다운 문법 포스팅: &lt;a href=&quot;https://heropy.bl
     Precision landing with marker based vision system concept diagram
 &lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;드론 스테이션&lt;/code&gt;에 착륙을 희망하는 드론은 GPS 기반으로 비행하여 카메라의 측정 반경 내부로 들어오게 되고, 이후 높은 위치 추정 정확도를 가지는 vision system의 정보를 기반으로 드론은 원하는 위치에 정확하게 landing할 수 있다. 이를 실제로 구현하기 위해서 비, 안개, 그리고 강한 햇빛 등의 외부 환경에서도 marker를 측정할 수 있는 active marker 시스템 구현 및 검증 그리고 드론이 panel과 가까워졌을 때 발생하는 ground effect를 고려할 수 있는 제어기 구성 등 세부적으로 고려해야할 개발 사항이 존재한다. 이러한 부분들에 대해서는 추후 미팅을 진행하면서 개발 방향을 잡아가도록 한다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2</summary></entry></feed>
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;드론 스테이션&lt;/code&gt;에 착륙을 희망하는 드론은 GPS 기반으로 비행하여 카메라의 측정 반경 내부로 들어오게 되고, 이후 높은 위치 추정 정확도를 가지는 vision system의 정보를 기반으로 드론은 원하는 위치에 정확하게 landing할 수 있다. 이를 실제로 구현하기 위해서 비, 안개, 그리고 강한 햇빛 등의 외부 환경에서도 marker를 측정할 수 있는 active marker 시스템 구현 및 검증 그리고 드론이 panel과 가까워졌을 때 발생하는 ground effect를 고려할 수 있는 제어기 구성 등 세부적으로 고려해야할 개발 사항이 존재한다. 이러한 부분들에 대해서는 추후 미팅을 진행하면서 개발 방향을 잡아가도록 한다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control</summary></entry></feed>

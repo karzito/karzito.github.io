@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Document Settings -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Base Meta -->
+    <!-- dynamically fixing the title for tag/author pages -->
+
+
+
+    <title>POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Styles'n'Scripts -->
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.edited.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/built/syntax.css" />
+
+    <!-- custom.css -->
+    <link rel="stylesheet" type="text/css" href="/assets/built/custom.css" />
+
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Web font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/nanumgothic.css">
+
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+    <style>.hljs { background: none; }</style>
+
+    <!--[if IE]>
+        <style>
+            p, ol, ul{
+                width: 100%;
+            }
+            blockquote{
+                width: 100%;
+            }
+        </style>
+    <![endif]-->
+    
+    <!-- This tag outputs SEO meta+structured data and other important settings -->
+    <meta name="description" content="ENTERPRISE: ISON" />
+    <link rel="shortcut icon" href="http://localhost:4000/assets/built/images/favicon.png" type="image/png" />
+    <link rel="canonical" href="http://localhost:4000/ict-ison-ctrlr" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+    
+        <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    TeX: {
+        equationNumbers: {
+        autoNumber: "AMS"
+        }
+    },
+    tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$'] ],
+    processEscapes: true,
+    }
+});
+MathJax.Hub.Register.MessageHook("Math Processing Error",function (message) {
+        alert("Math Processing Error: "+message[1]);
+    });
+MathJax.Hub.Register.MessageHook("TeX Jax - parse error",function (message) {
+        alert("Math Processing Error: "+message[1]);
+    });
+</script>
+<script type="text/javascript" async
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+    
+
+     <!--title below is coming from _includes/dynamic_title-->
+    <meta property="og:site_name" content="POSTECH ICT V+ 4.0 CLASS" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design" />
+    <meta property="og:description" content="13주차, 드론 동역학 및 제어기 설계 1 (21.05.10~21.05.21) 이번 13주차에서는 아래 추진일정에 따라 모션캡쳐 시스템을 활용한 드론 인식 및 측위 기술 개발에 관련한 내용을 포스팅한다. 지난 11주차 포스팅에서 드론 H/W를 제작하였다. 이제는 제작한 드론을 제어하기 위한 제어 S/W가 드론에 탑재되어야 한다. 드론 동역학 설명을 시작으로 드론 FC (Flight Controller)에 탑재될" />
+    <meta property="og:url" content="http://localhost:4000/ict-ison-ctrlr" />
+    <meta property="og:image" content="http://localhost:4000/assets/built/images/ictCover.jpg" />
+    <meta property="article:publisher" content="https://www.facebook.com/" />
+    <meta property="article:author" content="https://www.facebook.com/" />
+    <meta property="article:published_time" content="2021-05-11T08:11:00+09:00" />
+    <meta property="article:modified_time" content="2021-05-11T08:11:00+09:00" />
+    <meta property="article:tag" content="Ict" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design" />
+    <meta name="twitter:description" content="13주차, 드론 동역학 및 제어기 설계 1 (21.05.10~21.05.21) 이번 13주차에서는 아래 추진일정에 따라 모션캡쳐 시스템을 활용한 드론 인식 및 측위 기술 개발에 관련한 내용을 포스팅한다. 지난 11주차 포스팅에서 드론 H/W를 제작하였다. 이제는 제작한 드론을 제어하기 위한 제어 S/W가 드론에 탑재되어야 한다. 드론 동역학 설명을 시작으로 드론 FC (Flight Controller)에 탑재될" />
+    <meta name="twitter:url" content="http://localhost:4000/" />
+    <meta name="twitter:image" content="http://localhost:4000/assets/built/images/ictCover.jpg" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="POSTECH ICT V+ 4.0 CLASS" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="Ict" />
+    <meta name="twitter:site" content="@" />
+    <meta name="twitter:creator" content="@" />
+    <meta property="og:image:width" content="1400" />
+    <meta property="og:image:height" content="933" />
+
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Website",
+    "publisher": {
+        "@type": "Organization",
+        "name": "POSTECH ICT V+ 4.0 CLASS",
+        "logo": "http://localhost:4000/"
+    },
+    "url": "http://localhost:4000/ict-ison-ctrlr",
+    "image": {
+        "@type": "ImageObject",
+        "url": "http://localhost:4000/assets/built/images/ictCover.jpg",
+        "width": 2000,
+        "height": 666
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "http://localhost:4000/ict-ison-ctrlr"
+    },
+    "description": "13주차, 드론 동역학 및 제어기 설계 1 (21.05.10~21.05.21) 이번 13주차에서는 아래 추진일정에 따라 모션캡쳐 시스템을 활용한 드론 인식 및 측위 기술 개발에 관련한 내용을 포스팅한다. 지난 11주차 포스팅에서 드론 H/W를 제작하였다. 이제는 제작한 드론을 제어하기 위한 제어 S/W가 드론에 탑재되어야 한다. 드론 동역학 설명을 시작으로 드론 FC (Flight Controller)에 탑재될"
+}
+    </script>
+
+    <!-- <script type="text/javascript" src="https://demo.ghost.io/public/ghost-sdk.min.js?v=724281a32e"></script>
+    <script type="text/javascript">
+    ghost.init({
+    	clientId: "ghost-frontend",
+    	clientSecret: "f84a07a72b17"
+    });
+    </script> -->
+
+    <meta name="generator" content="Jekyll 3.6.2" />
+    <link rel="alternate" type="application/rss+xml" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design" href="/feed.xml" />
+
+
+</head>
+<body class="post-template">
+
+    <div class="site-wrapper">
+        <!-- All the main content gets inserted here, index.hbs, post.hbs, etc -->
+        <!-- default -->
+
+<!-- The tag above means: insert everything in this file
+into the {body} of the default.hbs template -->
+
+<header class="site-header outer">
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+        
+            
+                <a class="site-nav-logo" href="http://localhost:4000/">POSTECH ICT V+ 4.0 CLASS</a>
+            
+        
+        
+            <ul class="nav" role="menu">
+    <li class="nav-home" role="menuitem"><a href="/">Home</a></li>
+    <li class="nav-about" role="menuitem"><a href="/about/">About</a></li>
+    <li class="nav-ict" role="menuitem"><a href="/tag/ict/">ICT V+ 4.0</a></li>
+    <li class="nav-qCom" role="menuitem"><a href="/tag/quantum/">Quantum Computing</a></li>
+    <li class="nav-archive" role="menuitem">
+        <a href="/archive.html">All Posts</a>
+    </li>
+    <li class="nav-archive" role="menuitem">
+        <a href="/author_archive.html">Tag별 Posts</a>
+    </li>
+</ul>
+        
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+            
+            
+        </div>
+        
+    </div>
+</nav>
+
+    </div>
+</header>
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<main id="site-main" class="site-main outer" role="main">
+    <div class="inner">
+
+        <article class="post-full  tag-ict post tag-python ">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime="11 May 2021">11 May 2021</time>
+                    
+                        <span class="date-divider">/</span>
+                        
+                            
+                               <a href='/tag/ict/'>ICT</a>
+                            
+                        
+                    
+                </section>
+                <h1 class="post-full-title">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design</h1>
+            </header>
+            
+            <!--
+            
+            <figure class="post-full-image" style="background-image: url(/assets/built/images/ictCover.jpg)">
+            </figure>
+            
+            -->
+            
+            <section class="post-full-content">
+                <div class="kg-card-markdown">
+                    <h1 id="13주차-드론-동역학-및-제어기-설계-1-210510210521">13주차, 드론 동역학 및 제어기 설계 1 (21.05.10~21.05.21)</h1>
+
+<p>이번 13주차에서는 아래 추진일정에 따라 모션캡쳐 시스템을 활용한 드론 인식 및 측위 기술 개발에 관련한 내용을 포스팅한다.</p>
+
+<p>지난 11주차 포스팅에서 드론 H/W를 제작하였다. 이제는 제작한 드론을 제어하기 위한 제어 S/W가 드론에 탑재되어야 한다. 드론 동역학 설명을 시작으로 드론 FC (Flight Controller)에 탑재될 제어기가 왜 이렇게 구성되었는지에 대한 내용을 전달한다.</p>
+
+<p align="center">
+    <img src="assets/built/images/Ctrlr/Schedule.png" alt="schedule" />
+</p>
+
+<ol>
+  <li>드론 동역학
+    <ul>
+      <li>목표: 드론 동역학 이해</li>
+      <li>목적: 드론 동역학을 이해함으로써, 각 로터의 회전을 이용해 기체좌표계 그리고 나아가 관성좌표계에서 동체의 Position과 angle을 찾아내는 것에 그 목적이 있다.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>드론이라고 하면 손쉽게 떠올릴 수 있는 쿼드로터는 4개의 로터로 구동되는 방식의 UAV (Unmanned Aerial Vehicle) 이다.</p>
+
+<p align="center">
+    <img src="assets/built/images/Ctrlr/Drone.png" alt="drone" />
+</p>
+
+<p><strong>(1) 좌표계 정의</strong></p>
+
+<p>가장 먼저 드론 동역학을 이해하기 위해서 관성좌표계와 기체좌표계를 아래와 같이 정의한다.</p>
+
+<p align="center">
+    <img src="assets/built/images/Ctrlr/Coordinate.png" alt="coordinate" />
+</p>
+
+<p>관성좌표계에서 표현되는 드론의 위치와 관성좌표계에서 바라본 기체좌표계의 오일러 회전 각은 아래와 같이 $p,\eta$ 로 표현할 수 있다.</p>
+
+<script type="math/tex; mode=display">p=\begin{bmatrix}
+x\\
+y\\
+z
+\end{bmatrix},
+\eta=\begin{bmatrix}
+\phi\\
+\theta\\
+\psi
+\end{bmatrix}</script>
+
+<p>기체좌표계에서 축 방향으로의 선속도와 좌표축에 대한 각 속도는 아래와 같이 $v_B,\omega$로 표현 가능하다.</p>
+
+<script type="math/tex; mode=display">v_B=\begin{bmatrix}
+v_x\\
+v_y\\
+v_z
+\end{bmatrix},
+\omega=\begin{bmatrix}
+\omega_x\\
+\omega_y\\
+\omega_z
+\end{bmatrix}</script>
+
+<p>여기서 명심해야 할 것은 $p,\eta$ 은 관성좌표계에서 정의 된 성분이고, $v_B,\omega$는 기체좌표계에서 정의된 성분이라는 것이다.</p>
+
+<p>기체좌표계에서 관성좌표계로의 회전 변환은 아래와 같이 표현할 수 있다.</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+R = {R_z}(\psi ){R_y}(\theta ){R_x}(\phi ) = \begin{bmatrix}{\cos \theta \cos \psi }&{\sin \phi \sin \theta \cos \psi  - \cos \phi \sin \psi }&{\cos \phi \sin \theta \cos \psi  + \sin \phi \sin \psi }\\{\cos \theta \sin \psi }&{\sin \phi \sin \theta \sin \psi  - \cos \phi \cos \psi }&{\cos \phi \sin \theta \sin \psi  - \sin \phi \cos \psi }\\{ - \sin \theta }&{\sin \phi \cos \theta }&{\cos \phi \cos \theta }\end{bmatrix} %]]></script>
+
+<p>여기서, ${R_z}(\psi ),{R_y}(\theta ),{R_x}(\phi)$는 아래와 같다.</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+{R_x}(\phi ) =  {\begin{bmatrix}1&0&0\\0&{\cos \phi }&{ - \sin \phi }\\0&{\sin \phi }&{\cos \phi }\end{bmatrix}},{R_y}(\theta ) = {\begin{bmatrix}{\cos \theta }&0&{\sin \theta }\\0&1&0\\{ - \sin \theta }&0&{\cos \theta }\end{bmatrix}} ,\\{R_z}(\psi ) =  {\begin{bmatrix}{\cos \psi }&{ - \sin \psi }&0\\{\sin \psi }&{\cos \psi }&0\\0&0&1\end{bmatrix}} %]]></script>
+
+<p>회전 변환 행렬  $R$은 Orthogonal 하기 때문에, $R^{-1}=R^T$이고 이는 관성좌표계에서 기체좌표계로의 회전변환이 될 수 있다.</p>
+
+<p>관성좌표계에서의 각속도는 $C$ matrix를 이용하여 기체좌표계로 변환할 수 있다.</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\dot \eta  = {C^{ - 1}}\omega, \\c= {\begin{bmatrix}
+1&0&{ - \sin \theta }\\
+0&{\cos \phi }&{\cos \theta \sin \phi }\\
+0&{ - \sin \phi }&{\cos \theta \cos \phi }
+\end{bmatrix}}, \\c^{-1}= {\begin{bmatrix}
+1&{\sin \phi \tan \theta }&{\cos \phi \tan \theta }\\
+0&{\cos \phi }&{ - \sin \phi }\\
+0&{\frac{\sin \phi }{\cos \theta }}&{\frac{\cos \phi }{\cos \theta }}
+\end{bmatrix}} %]]></script>
+
+<p><strong>(2) 드론에서 발생 가능한 힘</strong></p>
+
+<p>쿼드콥터 타입의 드론은 symmetric한 구조로 가정되기 때문에 Inertia matrix는 아래와 같이 표현한다.</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+I =  {\begin{bmatrix}{I_{xx}}&0&0\\0&{I_{zz}}&0\\0&0&{I_{zz}}\end{bmatrix}} ,{I_{xx}} = {I_{yy}} %]]></script>
+
+<p>로터의 각속도를 $\omega_i$라고 하고, 로터의 회전에 의해서 발생하는 로터 축으로의 추력을 $f_i$라고 하자.</p>
+
+<p>로터의 각속도와 로터 축으로의 추력은 아래와 같은관계가 있다. 여기서 $k$는 <em>lift constant</em>이다.</p>
+
+<script type="math/tex; mode=display">{f_i} = k{\omega _i}^2</script>
+
+<p>또 로터축으로 발생되는 토크 ${\tau _{M_i}}$와는 아래와 같은 관계가 있으며, $I_M$은 로터의 관성모멘트이고, $b$는 <em>drag constant</em>이다.</p>
+
+<script type="math/tex; mode=display">\tau _{M_i} = b{\omega _i}^2 + {I_M}\mathop {\omega _i}</script>
+
+<p>로터가 생성하는 추력의 총합은 아래와 같다.</p>
+
+<script type="math/tex; mode=display">T = \sum\limits_{i = 1}^4 {f_i} = k \sum\limits_{i = 1}^4 {\omega _i}</script>
+
+<p>로터가 생성하는 추력은 드론의 구조상 항상 기체좌표계의 $z-axis$ 방향으로 작용한다.</p>
+
+<p>따라서 기체좌표계에서 드론의 추력은 $T^B$라고 표기하며 아래와 같이 표현할 수 있다.</p>
+
+<script type="math/tex; mode=display">{T^B} =  {\begin{bmatrix}0\\0\\T\end{bmatrix}}</script>
+
+<p>또한, 기체에서 발생하는 토크 $\tau^B$는 기체좌표계를  각 축에 따라서  $\tau_{x},\tau_{y},\tau_{z}$성분이 있으며, 아래와 같이 정의할 수 있다.</p>
+
+<script type="math/tex; mode=display">{\tau ^B} =  {\begin{bmatrix}{\tau _x }\\{\tau _y }\\{\tau _z}\end{bmatrix}}  =  {\begin{bmatrix}{lk( - {w_2}^2 + {w_4}^2)}\\{lk( - {w_1}^2 + {w_3}^2)}\\{\sum\limits_{i = 1}^4 {\tau _{M_i}} }\end{bmatrix}}</script>
+
+<p>여기서 주의해야 할 것은, $\tau_{x},\tau_{y},\tau_{z}$가 기체좌표계에서 기체좌표계의 축을 따라 정의한 토크라는 것이다.</p>
+
+<p>$l$은 로터와 드론 Mass center까지의 거리이고, $k$는 lift constant이다.</p>
+
+<p><strong>(3) Newton-Euler equation</strong></p>
+
+<p>드론은 강체 역학으로 해석할 수 있으며, 따라서 드론의 동역학을 <strong>Newton-Euler equation</strong>으로 해석할 수 있다.</p>
+
+<p>기체좌표계에서 질량을 가속하기위한 힘 $m\dot{v_B}$과 기체의 원심력 (Centrifugal Force) $\omega \times(mv_B)$은 중력에의한 힘$R^Tg=R^{-1}g$과 기체에서 발생하는 추력 $T_B$와 같다.</p>
+
+<script type="math/tex; mode=display">m \mathop {v_B}\limits^.  + \omega  \times (m{v_B}) = m{R^T}g + {T_B}</script>
+
+<p>여기서 원심력 $\omega \times(mv_B)$은 가상의 힘이므로 무시한다.</p>
+
+<p>따라서 위의 식은 관성좌표계에서 아래와 같이 표현 할 수 있다.</p>
+
+<script type="math/tex; mode=display">m\mathop p\limits^{ \cdot  \cdot }  = g + R{T_B},{\begin{bmatrix}{\mathop x\limits^{ \cdot  \cdot } }\\{\mathop y\limits^{ \cdot  \cdot } }\\{\mathop z\limits^{ \cdot  \cdot } }\end{bmatrix}}  = {\begin{bmatrix}0\\0\\{ - 9.81}\end{bmatrix}}  + \frac{T}{m} {\begin{bmatrix}{\cos \phi \sin \theta \cos \psi  + \sin \phi \sin \psi }\\{\cos \phi \sin \theta \sin \psi  - \sin \phi \cos \psi }\\{\cos \phi \cos \theta }\end{bmatrix}}</script>
+
+<p>여기서 <script type="math/tex">{\begin{bmatrix}{\cos \phi \sin \theta \cos \psi  + \sin \phi \sin \psi } \\ {\cos \phi \sin \theta \sin \psi  - \sin \phi \cos \psi } \\ {\cos \phi \cos \theta }\end{bmatrix}}</script> 는 드론에서 발생하는 추력이 $z-axis$성분만 존재하므로 $R$ 에서 $z-axis$ 성분에 대한 벡터이다.</p>
+
+<p>또 기체좌표계에서 관성모멘트의 가속과 구심력 (Centripetal Force) $\omega \times(I\omega)$ ,Gyroscophic force $\Gamma$는 외부에서 작용하는 토크 <script type="math/tex">\tau={\begin{bmatrix}{\tau_x/I_{xx}}\\{\tau_y /I_{yy}}\\{\tau_z/I_{zz}}\end{bmatrix}}</script>와 동일하다. 이는 아래와 같이 표현이 .</p>
+
+<script type="math/tex; mode=display">I\dot{\omega}+\omega\times(I\omega)+\Gamma=\tau</script>
+
+<script type="math/tex; mode=display">\dot \omega  = {I^{ - 1}}( - \left[ {\begin{bmatrix}{\omega _x}\\{\omega _y}\\{\omega _z}\end{bmatrix}} \right] \times \left[ {\begin{bmatrix}{I_{xx} \omega _x }\\{I_{yy} \omega _y}\\{I_{zz}\omega _z}\end{bmatrix}} \right] - {I_r}\left[ {\begin{bmatrix}{\omega _x}\\{\omega _y}\\{\omega _z}\end{bmatrix}} \right] \times \left[ {\begin{bmatrix}0\\0\\1\end{bmatrix}} \right]{\omega _T} + \tau )</script>
+
+<script type="math/tex; mode=display">{\begin{bmatrix}{\mathop {{\omega _x}}\limits^. }\\{\mathop {{\omega _y}}\limits^. }\\{\mathop {{\omega _z}}\limits^. }\end{bmatrix}}  =  {\begin{bmatrix}{({I_{xx}} - {I_{yy}}){\omega _y}{\omega _z}/{I_{xx}}}\\{({I_{xx}} - {I_{yy}}){\omega _x}{\omega _z}/{I_{yy}}}\\{({I_{xx}} - {I_{yy}}){\omega _x}{\omega _y}/{I_{zz}}}\end{bmatrix}} - {I_r} {\begin{bmatrix}{{\omega _x}/{I_{xx}}}\\{ - {\omega _y}/{I_{yy}}}\\0\end{bmatrix}} {\omega _T} +  {\begin{bmatrix}{{\tau _x}/{I_{xx}}}\\{{\tau _y}/{I_{yy}}}\\{{\tau _z}/{I_{zz}}}\end{bmatrix}}</script>
+
+<p>여기서 $\omega_T=\omega_1-\omega_2+\omega_3-\omega_4$ 이다.</p>
+
+<p>여기까지 우리는 기체좌표계에서의 각 가속도를 표현할 수 있게 되었다.  여기서 우리는 $\dot{\eta}=C^{-1}\omega$인 것을 알고있다. 따라서 관성좌표계에서의 각 가속도는 아래와 같이 표현할 수 있다.</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\mathop \eta \limits^{ \cdot  \cdot }  = \frac{d}{{dt}}({C^{ - 1}}\omega ) = \frac{d}{{dt}}({C^{ - 1}})\omega  + {C^{ - 1}}\dot \omega \\
+\\= {\begin{bmatrix}
+0&{\dot \phi \cos \phi \tan \theta  + \dot \theta \sin \phi /{{\cos }^2}\theta }&{ - \dot \phi \sin \phi \cos \theta  + \dot \theta \cos \phi /{{\cos }^2}\theta }\\
+0&{ - \dot \phi \sin \phi }&{ - \dot \phi \cos \phi }\\
+0&{\dot \phi \cos \phi /\cos \theta  + \dot \phi \sin \phi \tan \theta /\cos \theta }&{\dot \phi \sin \phi /\cos \theta  + \dot \phi \cos \phi \tan \theta /\cos \theta }
+\end{bmatrix}} \omega  + {C^{ - 1}}\dot \omega %]]></script>
+
+<p>(3) Simulation</p>
+
+<p>(2)까지 우리는 드론의 동역학을 이해해 보았다. 따라서, 로터에서 발생하는 회전에 따라서 드론이 관성좌표계 그리고 기체좌표계에서 어떤 거동을 보일지를 수식적으로 해석할 수 있다.</p>
+
+<p>이후, Matlab에서 각 로터의 회전에 대한 시뮬레이션 툴을 개발하였다.</p>
+
+<video width="480" height="320" controls="controls">
+  <source src="assets\built\images\Ctrlr\Simulation.mp4" type="video/mp4" />
+</video>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="c1">%% Written by Sungkwan Kim, CoCEL, POSTECH</span>
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="c1">%% Hardware parameter</span>
+<span class="n">params</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="mf">0.468</span><span class="p">;</span>
+<span class="n">params</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="mf">9.81</span><span class="p">;</span>
+<span class="n">params</span><span class="o">.</span><span class="n">Ixx</span> <span class="o">=</span> <span class="mf">4.856</span><span class="o">*</span><span class="mf">1e-3</span><span class="p">;</span>
+<span class="n">params</span><span class="o">.</span><span class="n">Iyy</span> <span class="o">=</span> <span class="mf">4.856</span><span class="o">*</span><span class="mf">1e-3</span><span class="p">;</span>
+<span class="n">params</span><span class="o">.</span><span class="n">Izz</span> <span class="o">=</span> <span class="mf">8.801</span><span class="o">*</span><span class="mf">1e-3</span><span class="p">;</span>
+<span class="n">params</span><span class="o">.</span><span class="n">l</span> <span class="o">=</span> <span class="mf">0.225</span><span class="p">;</span>
+<span class="n">params</span><span class="o">.</span><span class="n">K</span> <span class="o">=</span> <span class="mf">2.980</span><span class="o">*</span><span class="mf">1e-6</span><span class="p">;</span> 
+<span class="n">params</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="mf">1.14</span><span class="o">*</span><span class="mf">1e-7</span><span class="p">;</span>
+
+<span class="c1">%% Speed and thrust of each rotor</span>
+<span class="n">omega</span> <span class="o">=</span> <span class="mf">1.8</span><span class="p">;</span> <span class="c1">%1.075 %시스템 입력</span>
+<span class="n">speed</span> <span class="o">=</span> <span class="n">omega</span><span class="o">*</span><span class="nb">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="p">/</span><span class="n">params</span><span class="o">.</span><span class="n">K</span><span class="p">);</span>
+<span class="n">dspeed</span> <span class="o">=</span> <span class="mf">0.05</span><span class="o">*</span><span class="n">speed</span><span class="p">;</span>
+<span class="n">params</span><span class="o">.</span><span class="n">omega1</span> <span class="o">=</span> <span class="n">speed</span><span class="p">;</span>
+<span class="n">params</span><span class="o">.</span><span class="n">omega2</span> <span class="o">=</span> <span class="o">-</span><span class="n">speed</span><span class="p">;</span>
+<span class="n">params</span><span class="o">.</span><span class="n">omega3</span> <span class="o">=</span> <span class="n">speed</span><span class="p">;</span>
+<span class="n">params</span><span class="o">.</span><span class="n">omega4</span> <span class="o">=</span> <span class="o">-</span><span class="n">speed</span><span class="p">;</span>
+
+<span class="n">params</span><span class="o">.</span><span class="n">thrust1</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">K</span><span class="o">*</span><span class="n">params</span><span class="o">.</span><span class="n">omega1</span><span class="p">;</span>
+<span class="n">params</span><span class="o">.</span><span class="n">thrust2</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">K</span><span class="o">*</span><span class="n">params</span><span class="o">.</span><span class="n">omega2</span><span class="p">;</span>
+<span class="n">params</span><span class="o">.</span><span class="n">thrust3</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">K</span><span class="o">*</span><span class="n">params</span><span class="o">.</span><span class="n">omega3</span><span class="p">;</span>
+<span class="n">params</span><span class="o">.</span><span class="n">thrust4</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">K</span><span class="o">*</span><span class="n">params</span><span class="o">.</span><span class="n">omega4</span><span class="p">;</span>
+
+<span class="c1">%% Initial state</span>
+<span class="c1">%Initial position and velocity</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">y0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">z0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">vx0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">vy0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">vz0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	
+<span class="c1">%Initial euler angles and rates</span>
+<span class="n">phi0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">theta0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">psi0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">phidot0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">thetadot0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> 
+<span class="n">psidot0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">%% Solving Derivative Eq</span>
+<span class="n">tspan</span> <span class="o">=</span> <span class="nb">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1000</span><span class="p">);</span>
+<span class="n">Z0</span><span class="o">=</span><span class="p">[</span><span class="n">x0</span> <span class="n">y0</span> <span class="n">z0</span> <span class="n">phi0</span> <span class="n">theta0</span> <span class="n">psi0</span> <span class="n">vx0</span> <span class="n">vy0</span> <span class="n">vz0</span> <span class="n">phidot0</span> <span class="n">thetadot0</span> <span class="n">psidot0</span><span class="p">]</span><span class="o">'</span><span class="p">;</span>
+<span class="n">options</span><span class="o">=</span><span class="nb">odeset</span><span class="p">(</span><span class="s1">'abstol'</span><span class="p">,</span><span class="mf">1e-12</span><span class="p">,</span><span class="s1">'reltol'</span><span class="p">,</span><span class="mf">1e-12</span><span class="p">);</span>
+
+<span class="p">[</span><span class="n">T</span> <span class="n">Z</span><span class="p">]</span> <span class="o">=</span> <span class="nb">ode45</span><span class="p">(</span><span class="o">@</span><span class="n">eom</span><span class="p">,</span><span class="n">tspan</span><span class="p">,</span><span class="n">Z0</span><span class="p">,</span><span class="n">options</span><span class="p">,</span><span class="n">params</span><span class="p">);</span>
+
+<span class="nb">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">hold</span> <span class="n">on</span><span class="p">;</span>
+<span class="nb">plot</span><span class="p">(</span><span class="n">T</span><span class="p">,</span><span class="n">Z</span><span class="p">);</span>
+<span class="nb">legend</span><span class="p">(</span><span class="s1">'x'</span><span class="p">,</span><span class="s1">'y'</span><span class="p">,</span><span class="s1">'z'</span><span class="p">,</span><span class="s1">'$\phi$'</span><span class="p">,</span><span class="s1">'$\theta$'</span><span class="p">,</span><span class="s1">'$\psi$'</span><span class="p">,</span><span class="s1">'$\dot{x}$'</span><span class="p">,</span><span class="s1">'$\dot{y}$'</span><span class="p">,</span><span class="s1">'$\dot{z}$'</span><span class="p">,</span><span class="s1">'$\dot{\phi}$'</span><span class="p">,</span><span class="s1">'$\dot{\theta}$'</span><span class="p">,</span><span class="s1">'$\dot{\psi}$'</span><span class="p">,</span><span class="s1">'Interpreter'</span><span class="p">,</span><span class="s1">'latex'</span><span class="p">,</span><span class="s1">'Fontsize'</span><span class="p">,</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="nb">figure</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">hold</span> <span class="n">on</span><span class="p">;</span>
+<span class="n">positions</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(:,</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">);</span>
+<span class="n">angles</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(:,</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">);</span>
+<span class="n">animate</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span><span class="n">angles</span><span class="p">,</span><span class="n">params</span><span class="o">.</span><span class="n">l</span><span class="p">)</span>
+
+<span class="c1">%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="k">function</span> <span class="n">Zdot</span> <span class="o">=</span> <span class="n">eom</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">params</span><span class="p">)</span>
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">m</span><span class="p">;</span>
+<span class="n">Ixx</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">Ixx</span><span class="p">;</span>
+<span class="n">Iyy</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">Iyy</span><span class="p">;</span>
+<span class="n">Izz</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">Izz</span><span class="p">;</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">g</span><span class="p">;</span>
+<span class="n">l</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">l</span><span class="p">;</span>
+<span class="n">K</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">K</span><span class="p">;</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">b</span><span class="p">;</span>
+
+<span class="n">omega1</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">omega1</span><span class="p">;</span>
+<span class="n">omega2</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">omega2</span><span class="p">;</span>
+<span class="n">omega3</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">omega3</span><span class="p">;</span>
+<span class="n">omega4</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">omega4</span><span class="p">;</span>
+
+<span class="n">force1</span> <span class="o">=</span> <span class="n">K</span><span class="o">*</span><span class="n">omega1</span><span class="o">^</span><span class="mi">2</span>
+<span class="n">force2</span> <span class="o">=</span> <span class="n">K</span><span class="o">*</span><span class="n">omega2</span><span class="o">^</span><span class="mi">2</span>
+<span class="n">force3</span> <span class="o">=</span> <span class="n">K</span><span class="o">*</span><span class="n">omega3</span><span class="o">^</span><span class="mi">2</span>
+<span class="n">force4</span> <span class="o">=</span> <span class="n">K</span><span class="o">*</span><span class="n">omega4</span><span class="o">^</span><span class="mi">2</span>
+
+<span class="n">F_z</span> <span class="o">=</span> <span class="n">K</span><span class="o">*</span><span class="p">(</span><span class="n">omega1</span><span class="o">^</span><span class="mi">2</span> <span class="o">+</span> <span class="n">omega2</span><span class="o">^</span><span class="mi">2</span> <span class="o">+</span> <span class="n">omega3</span><span class="o">^</span><span class="mi">2</span> <span class="o">+</span> <span class="n">omega4</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">tau_x</span> <span class="o">=</span> <span class="n">l</span><span class="o">*</span><span class="n">K</span><span class="o">*</span><span class="p">(</span><span class="n">omega4</span><span class="o">^</span><span class="mi">2</span> <span class="o">-</span> <span class="n">omega2</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">tau_y</span> <span class="o">=</span> <span class="n">l</span><span class="o">*</span><span class="n">K</span><span class="o">*</span><span class="p">(</span><span class="n">omega3</span><span class="o">^</span><span class="mi">2</span> <span class="o">-</span> <span class="n">omega1</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">tau_z</span> <span class="o">=</span> <span class="n">b</span><span class="o">*</span><span class="p">(</span><span class="n">omega1</span><span class="o">^</span><span class="mi">2</span> <span class="o">-</span><span class="n">omega2</span><span class="o">^</span><span class="mi">2</span> <span class="o">+</span> <span class="n">omega3</span><span class="o">^</span><span class="mi">2</span> <span class="o">-</span> <span class="n">omega4</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="n">z</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span> <span class="c1">%p</span>
+<span class="n">phi</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span> <span class="n">theta</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span> <span class="nb">psi</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span> <span class="c1">%eta</span>
+<span class="n">vx</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span> <span class="n">vy</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span> <span class="n">vz</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(</span><span class="mi">9</span><span class="p">);</span> <span class="c1">%p_dot</span>
+<span class="n">phidot</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span> <span class="n">thetadot</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(</span><span class="mi">11</span><span class="p">);</span> <span class="n">psidot</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(</span><span class="mi">12</span><span class="p">);</span> <span class="c1">%eta_dot</span>
+
+<span class="n">sphi</span> <span class="o">=</span> <span class="nb">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">);</span>
+<span class="n">cphi</span> <span class="o">=</span> <span class="nb">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">);</span>
+<span class="n">stht</span> <span class="o">=</span> <span class="nb">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">);</span>
+<span class="n">ctht</span> <span class="o">=</span> <span class="nb">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">);</span>
+<span class="n">spsi</span> <span class="o">=</span> <span class="nb">sin</span><span class="p">(</span><span class="nb">psi</span><span class="p">);</span>
+<span class="n">cpsi</span> <span class="o">=</span> <span class="nb">cos</span><span class="p">(</span><span class="nb">psi</span><span class="p">);</span>
+
+<span class="n">R</span> <span class="o">=</span> <span class="p">[</span><span class="n">cpsi</span><span class="o">*</span><span class="n">ctht</span> <span class="n">cpsi</span><span class="o">*</span><span class="n">stht</span><span class="o">*</span><span class="n">sphi</span><span class="o">-</span><span class="n">spsi</span><span class="o">*</span><span class="n">cphi</span> <span class="n">cpsi</span><span class="o">*</span><span class="n">stht</span><span class="o">*</span><span class="n">cphi</span><span class="o">+</span><span class="n">spsi</span><span class="o">*</span><span class="n">sphi</span><span class="p">;</span>	
+     <span class="n">spsi</span><span class="o">*</span><span class="n">ctht</span> <span class="n">spsi</span><span class="o">*</span><span class="n">stht</span><span class="o">*</span><span class="n">sphi</span><span class="o">+</span><span class="n">cpsi</span><span class="o">*</span><span class="n">cphi</span> <span class="n">spsi</span><span class="o">*</span><span class="n">stht</span><span class="o">*</span><span class="n">cphi</span><span class="o">-</span><span class="n">cpsi</span><span class="o">*</span><span class="n">sphi</span><span class="p">;</span>	
+     <span class="o">-</span><span class="n">stht</span>     <span class="n">ctht</span><span class="o">*</span><span class="n">sphi</span>                <span class="n">ctht</span><span class="o">*</span><span class="n">cphi</span><span class="p">];</span>
+
+<span class="n">C</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span>     <span class="o">-</span><span class="n">stht</span><span class="p">;</span>
+     <span class="mi">0</span> <span class="n">cphi</span>  <span class="n">sphi</span><span class="o">*</span><span class="n">ctht</span><span class="p">;</span>
+     <span class="mi">0</span> <span class="o">-</span><span class="n">sphi</span> <span class="n">cphi</span><span class="o">*</span><span class="n">ctht</span><span class="p">];</span>
+ 
+<span class="n">C_dot</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">0</span>             <span class="o">-</span><span class="n">thetadot</span><span class="o">*</span><span class="n">ctht</span><span class="p">;</span>
+         <span class="mi">0</span> <span class="o">-</span><span class="n">phidot</span><span class="o">*</span><span class="n">sphi</span> <span class="n">phidot</span><span class="o">*</span><span class="n">cphi</span><span class="o">*</span><span class="n">ctht</span><span class="o">-</span><span class="n">thetadot</span><span class="o">*</span><span class="n">sphi</span><span class="o">*</span><span class="n">stht</span><span class="p">;</span>
+         <span class="mi">0</span> <span class="o">-</span><span class="n">phidot</span><span class="o">*</span><span class="n">cphi</span> <span class="o">-</span><span class="n">phidot</span><span class="o">*</span><span class="n">sphi</span><span class="o">*</span><span class="n">ctht</span><span class="o">-</span><span class="n">thetadot</span><span class="o">*</span><span class="n">cphi</span><span class="o">*</span><span class="n">stht</span><span class="p">];</span>
+
+<span class="n">xdotdot</span> <span class="o">=</span> <span class="p">(</span><span class="n">cphi</span><span class="o">*</span><span class="n">stht</span><span class="o">*</span><span class="n">cpsi</span> <span class="o">+</span> <span class="n">sphi</span><span class="o">*</span><span class="n">spsi</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">F_z</span><span class="p">/</span><span class="n">m</span><span class="p">)</span>
+<span class="n">ydotdot</span> <span class="o">=</span> <span class="p">(</span><span class="n">cphi</span><span class="o">*</span><span class="n">stht</span><span class="o">*</span><span class="n">spsi</span> <span class="o">+</span> <span class="n">sphi</span><span class="o">*</span><span class="n">cpsi</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">F_z</span><span class="p">/</span><span class="n">m</span><span class="p">)</span>
+<span class="n">zdotdot</span> <span class="o">=</span> <span class="p">(</span><span class="n">cphi</span><span class="o">*</span><span class="n">ctht</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">F_z</span><span class="p">/</span><span class="n">m</span><span class="p">)</span> <span class="o">-</span> <span class="n">g</span>
+
+<span class="n">phidotdot</span> <span class="o">=</span> <span class="p">((</span><span class="n">Iyy</span><span class="o">-</span><span class="n">Izz</span><span class="p">)</span><span class="o">*</span><span class="n">thetadot</span><span class="o">*</span><span class="n">psidot</span> <span class="o">+</span> <span class="n">tau_x</span><span class="p">)/</span><span class="n">Ixx</span>
+<span class="n">thetadotdot</span> <span class="o">=</span> <span class="p">((</span><span class="n">Izz</span><span class="o">-</span><span class="n">Ixx</span><span class="p">)</span><span class="o">*</span><span class="n">phidot</span><span class="o">*</span><span class="n">psidot</span> <span class="o">+</span> <span class="n">tau_y</span><span class="p">)/</span><span class="n">Iyy</span>
+<span class="n">psidotdot</span> <span class="o">=</span>  <span class="p">((</span><span class="n">Ixx</span><span class="o">-</span><span class="n">Iyy</span><span class="p">)</span><span class="o">*</span><span class="n">phidot</span><span class="o">*</span><span class="n">thetadot</span> <span class="o">+</span> <span class="n">tau_z</span><span class="p">)/</span><span class="n">Izz</span>
+
+<span class="c1">%본래 X는</span>
+<span class="c1">%'$\dot{x}$','$\dot{y}$','$\dot{z}$','$\dot{\phi}$','$\dot{\theta}$','$\dot{\psi}$'를</span>
+<span class="c1">%포함하고 있음</span>
+<span class="c1">%결국 X(1)~X(2)까지는 p2dot과 eta2dot이 들어가야함</span>
+<span class="n">Zdot</span> <span class="o">=</span> <span class="p">[</span><span class="n">vx</span> <span class="n">vy</span> <span class="n">vz</span> <span class="n">phidot</span> <span class="n">thetadot</span> <span class="n">psidot</span> <span class="n">xdotdot</span> <span class="n">ydotdot</span> <span class="n">zdotdot</span> <span class="n">phidotdot</span> <span class="n">thetadotdot</span> <span class="n">psidotdot</span><span class="p">]</span><span class="o">'</span> 
+<span class="k">end</span>
+
+<span class="c1">%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="k">function</span> <span class="n">animate</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span><span class="n">angles</span><span class="p">,</span><span class="n">l</span><span class="p">)</span>
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+    <span class="n">axle_x</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">l</span><span class="p">/</span><span class="mi">2</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">;</span>
+               <span class="n">l</span><span class="p">/</span><span class="mi">2</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">];</span>
+    <span class="n">axle_y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="o">-</span><span class="n">l</span><span class="p">/</span><span class="mi">2</span> <span class="mi">0</span><span class="p">;</span>
+              <span class="mi">0</span>  <span class="n">l</span><span class="p">/</span><span class="mi">2</span> <span class="mi">0</span><span class="p">];</span>
+
+    <span class="n">dmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="nb">max</span><span class="p">(</span><span class="n">positions</span><span class="p">),</span><span class="n">l</span><span class="p">]);</span>
+
+    <span class="n">r</span> <span class="o">=</span> <span class="mf">0.1</span><span class="o">*</span><span class="n">l</span><span class="p">;</span> <span class="c1">%radius of propellers</span>
+    <span class="n">ang</span> <span class="o">=</span> <span class="nb">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="nb">pi</span><span class="p">);</span>
+    <span class="n">x_circle</span> <span class="o">=</span> <span class="n">r</span><span class="o">*</span><span class="nb">cos</span><span class="p">(</span><span class="n">ang</span><span class="p">);</span>
+    <span class="n">y_circle</span> <span class="o">=</span> <span class="n">r</span><span class="o">*</span><span class="nb">sin</span><span class="p">(</span><span class="n">ang</span><span class="p">);</span>
+    <span class="n">z_circle</span> <span class="o">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">length</span><span class="p">(</span><span class="n">ang</span><span class="p">));</span>
+    <span class="n">propeller</span> <span class="o">=</span> <span class="p">[</span><span class="n">x_circle</span><span class="s1">',y_circle'</span><span class="p">,</span><span class="n">z_circle</span><span class="o">'</span><span class="p">];</span>
+
+    <span class="p">[</span><span class="n">p1</span><span class="p">,</span><span class="n">q1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">propeller</span><span class="p">);</span>
+    <span class="p">[</span><span class="n">p2</span><span class="p">,</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">axle_x</span><span class="p">);</span>
+    <span class="p">[</span><span class="n">mm</span><span class="p">,</span><span class="n">nn</span><span class="p">]</span> <span class="o">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">angles</span><span class="p">);</span>
+
+    <span class="k">for</span> <span class="n">ii</span><span class="o">=</span><span class="mi">1</span><span class="p">:</span><span class="n">mm</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">positions</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">positions</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">positions</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="n">angles</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span> 
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">angles</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+        <span class="nb">psi</span> <span class="o">=</span> <span class="n">angles</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">get_rotation</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="nb">psi</span><span class="p">);</span>
+
+        <span class="k">for</span> <span class="nb">i</span><span class="o">=</span><span class="mi">1</span><span class="p">:</span><span class="n">p2</span>
+            <span class="n">r_body</span> <span class="o">=</span> <span class="n">axle_x</span><span class="p">(</span><span class="nb">i</span><span class="p">,:)</span><span class="o">'</span><span class="p">;</span>
+            <span class="n">r_world</span> <span class="o">=</span> <span class="n">R</span><span class="o">*</span><span class="n">r_body</span><span class="p">;</span>
+            <span class="n">new_axle_x</span><span class="p">(</span><span class="nb">i</span><span class="p">,:)</span> <span class="o">=</span> <span class="n">r_world</span><span class="o">'</span><span class="p">;</span>
+        <span class="k">end</span>
+        <span class="n">new_axle_x</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="n">y</span> <span class="n">z</span><span class="p">]</span> <span class="o">+</span><span class="n">new_axle_x</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="nb">i</span><span class="o">=</span><span class="mi">1</span><span class="p">:</span><span class="n">p2</span>
+            <span class="n">r_body</span> <span class="o">=</span> <span class="n">axle_y</span><span class="p">(</span><span class="nb">i</span><span class="p">,:)</span><span class="o">'</span><span class="p">;</span>
+            <span class="n">r_world</span> <span class="o">=</span> <span class="n">R</span><span class="o">*</span><span class="n">r_body</span><span class="p">;</span>
+            <span class="n">new_axle_y</span><span class="p">(</span><span class="nb">i</span><span class="p">,:)</span> <span class="o">=</span> <span class="n">r_world</span><span class="o">'</span><span class="p">;</span>
+        <span class="k">end</span>
+        <span class="n">new_axle_y</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="n">y</span> <span class="n">z</span><span class="p">]</span> <span class="o">+</span><span class="n">new_axle_y</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="nb">i</span><span class="o">=</span><span class="mi">1</span><span class="p">:</span><span class="n">p1</span>
+            <span class="n">r_body</span> <span class="o">=</span> <span class="n">propeller</span><span class="p">(</span><span class="nb">i</span><span class="p">,:)</span><span class="o">'</span><span class="p">;</span>
+            <span class="n">r_world</span> <span class="o">=</span> <span class="n">R</span><span class="o">*</span><span class="n">r_body</span><span class="p">;</span>
+            <span class="n">new_propeller</span><span class="p">(</span><span class="nb">i</span><span class="p">,:)</span> <span class="o">=</span> <span class="n">r_world</span><span class="o">'</span><span class="p">;</span> 
+        <span class="k">end</span>
+        <span class="n">new_propeller1</span> <span class="o">=</span> <span class="n">new_axle_x</span><span class="p">(</span><span class="mi">1</span><span class="p">,:)</span> <span class="o">+</span> <span class="n">new_propeller</span><span class="p">;</span>
+        <span class="n">new_propeller3</span> <span class="o">=</span> <span class="n">new_axle_x</span><span class="p">(</span><span class="mi">2</span><span class="p">,:)</span> <span class="o">+</span> <span class="n">new_propeller</span><span class="p">;</span>
+        <span class="n">new_propeller2</span> <span class="o">=</span> <span class="n">new_axle_y</span><span class="p">(</span><span class="mi">1</span><span class="p">,:)</span> <span class="o">+</span> <span class="n">new_propeller</span><span class="p">;</span>
+        <span class="n">new_propeller4</span> <span class="o">=</span> <span class="n">new_axle_y</span><span class="p">(</span><span class="mi">2</span><span class="p">,:)</span> <span class="o">+</span> <span class="n">new_propeller</span><span class="p">;</span>
+
+         <span class="nb">line</span><span class="p">(</span><span class="n">new_axle_x</span><span class="p">(:,</span><span class="mi">1</span><span class="p">),</span><span class="n">new_axle_x</span><span class="p">(:,</span><span class="mi">2</span><span class="p">),</span><span class="n">new_axle_x</span><span class="p">(:,</span><span class="mi">3</span><span class="p">),</span><span class="s1">'Linewidth'</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span> <span class="nb">hold</span> <span class="n">on</span><span class="p">;</span>
+         <span class="nb">line</span><span class="p">(</span><span class="n">new_axle_y</span><span class="p">(:,</span><span class="mi">1</span><span class="p">),</span><span class="n">new_axle_y</span><span class="p">(:,</span><span class="mi">2</span><span class="p">),</span><span class="n">new_axle_y</span><span class="p">(:,</span><span class="mi">3</span><span class="p">),</span><span class="s1">'Linewidth'</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+        <span class="nb">patch</span><span class="p">(</span><span class="n">new_propeller1</span><span class="p">(:,</span><span class="mi">1</span><span class="p">),</span><span class="n">new_propeller1</span><span class="p">(:,</span><span class="mi">2</span><span class="p">),</span><span class="n">new_propeller1</span><span class="p">(:,</span><span class="mi">3</span><span class="p">),</span><span class="s1">'r'</span><span class="p">);</span>
+        <span class="nb">patch</span><span class="p">(</span><span class="n">new_propeller2</span><span class="p">(:,</span><span class="mi">1</span><span class="p">),</span><span class="n">new_propeller2</span><span class="p">(:,</span><span class="mi">2</span><span class="p">),</span><span class="n">new_propeller2</span><span class="p">(:,</span><span class="mi">3</span><span class="p">),</span><span class="s1">'g'</span><span class="p">);</span>
+        <span class="nb">patch</span><span class="p">(</span><span class="n">new_propeller3</span><span class="p">(:,</span><span class="mi">1</span><span class="p">),</span><span class="n">new_propeller3</span><span class="p">(:,</span><span class="mi">2</span><span class="p">),</span><span class="n">new_propeller3</span><span class="p">(:,</span><span class="mi">3</span><span class="p">),</span><span class="s1">'b'</span><span class="p">);</span>
+        <span class="nb">patch</span><span class="p">(</span><span class="n">new_propeller4</span><span class="p">(:,</span><span class="mi">1</span><span class="p">),</span><span class="n">new_propeller4</span><span class="p">(:,</span><span class="mi">2</span><span class="p">),</span><span class="n">new_propeller4</span><span class="p">(:,</span><span class="mi">3</span><span class="p">),</span><span class="s1">'c'</span><span class="p">);</span>
+        <span class="nb">axis</span><span class="p">(</span><span class="mf">1.2</span><span class="o">*</span><span class="p">[</span><span class="o">-</span><span class="n">dmax</span> <span class="n">dmax</span> <span class="o">-</span><span class="n">dmax</span> <span class="n">dmax</span> <span class="o">-</span><span class="n">dmax</span> <span class="n">dmax</span><span class="p">]);</span>
+        <span class="nb">xlabel</span><span class="p">(</span><span class="s1">'x'</span><span class="p">);</span> <span class="nb">ylabel</span><span class="p">(</span><span class="s1">'y'</span><span class="p">);</span> <span class="nb">zlabel</span><span class="p">(</span><span class="s1">'z'</span><span class="p">);</span>
+        <span class="c1">%view(0,90)</span>
+        <span class="nb">view</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="nb">pause</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ii</span><span class="o">~=</span><span class="n">mm</span><span class="p">)</span>
+            <span class="nb">clf</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+<span class="c1">%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="k">function</span> <span class="n">R</span> <span class="o">=</span> <span class="n">get_rotation</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="nb">psi</span><span class="p">)</span>
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+    <span class="c1">%%%%%%% uses 3-2-1 euler angles</span>
+    <span class="n">R_x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span>    <span class="mi">0</span>       <span class="mi">0</span><span class="p">;</span> <span class="k">...</span>
+           <span class="mi">0</span>  <span class="nb">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">-</span><span class="nb">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">);</span> <span class="k">...</span>
+           <span class="mi">0</span>  <span class="nb">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="nb">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)];</span>
+
+    <span class="n">R_y</span> <span class="o">=</span> <span class="p">[</span><span class="nb">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>  <span class="mi">0</span>   <span class="nb">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">);</span> <span class="k">...</span>
+           <span class="mi">0</span>           <span class="mi">1</span>         <span class="mi">0</span><span class="p">;</span> <span class="k">...</span>
+          <span class="o">-</span><span class="nb">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="mi">0</span>   <span class="nb">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)];</span> 
+
+    <span class="n">R_z</span> <span class="o">=</span> <span class="p">[</span><span class="nb">cos</span><span class="p">(</span><span class="nb">psi</span><span class="p">)</span> <span class="o">-</span><span class="nb">sin</span><span class="p">(</span><span class="nb">psi</span><span class="p">)</span>  <span class="mi">0</span><span class="p">;</span> <span class="k">...</span>
+           <span class="nb">sin</span><span class="p">(</span><span class="nb">psi</span><span class="p">)</span>  <span class="nb">cos</span><span class="p">(</span><span class="nb">psi</span><span class="p">)</span>  <span class="mi">0</span><span class="p">;</span> <span class="k">...</span>
+           <span class="mi">0</span>           <span class="mi">0</span>       <span class="mi">1</span><span class="p">];</span>  
+    <span class="n">R</span> <span class="o">=</span> <span class="n">R_z</span><span class="o">*</span><span class="n">R_y</span><span class="o">*</span><span class="n">R_x</span><span class="p">;</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+                </div>
+            </section>
+
+            <!-- Email subscribe form at the bottom of the page -->
+            
+
+            <footer class="post-full-footer">
+                <!-- Everything inside the #author tags pulls data from the author -->
+                <!-- #author-->
+                
+                    
+                        <section class="author-card">
+                            
+                                <img class="author-profile-image" src="/assets/built/images/quantum.png" alt="karzito" />
+                            
+                            <section class="author-card-content">
+                                <h4 class="author-card-name"><a href="/author/karzito">ChangHyeon Lee</a></h4>
+                                
+                                    <p>ph.D student in electrical engineering at POSTECH, Computing and Control Engineering Lab (CoCEL)</a></p>
+                                
+                            </section>
+                        </section>
+                        <div class="post-full-footer-right">
+                            <a class="author-card-button" href="/author/karzito">Read More</a>
+                        </div>
+                    
+                
+                <!-- /author  -->
+            </footer>
+
+            <!-- If you use Disqus comments, just uncomment this block.
+            The only thing you need to change is "test-apkdzgmqhj" - which
+            should be replaced with your own Disqus site-id. -->
+            
+
+        </article>
+
+    </div>
+</main>
+
+<!-- Links to Previous/Next posts -->
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+            
+                
+                
+                
+                
+                    <article class="read-next-card"
+                        
+                            style="background-image: url(/assets/built/images/rainSurfing4.jpg)"
+                        
+                    >
+                        <header class="read-next-card-header">
+                            <small class="read-next-card-header-sitetitle">&mdash; POSTECH ICT V+ 4.0 CLASS &mdash;</small>
+                            
+                                <h3 class="read-next-card-header-title"><a href="/tag/ict/">Ict</a></h3>
+                            
+                        </header>
+                        <div class="read-next-divider"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/></svg>
+</div>
+                        <div class="read-next-card-content">
+                            <ul>
+                                
+                                
+                                  
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                            <li><a href="/ict-ison-imp">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-26 Drone System Implementation</a></li>
+                                        
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                            <li><a href="/ict-ison-eskf2">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_2</a></li>
+                                        
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                            <li><a href="/ict-ison-eskf1">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_1</a></li>
+                                        
+                                    
+                                  
+                                
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                    
+                                  
+                                
+                            </ul>
+                        </div>
+                        <footer class="read-next-card-footer">
+                            <a href="/tag/ict/">
+                                
+                                    See all 5 posts  →
+                                
+                            </a>
+                        </footer>
+                    </article>
+                
+            
+
+            <!-- If there's a next post, display it using the same markup included from - partials/post-card.hbs -->
+            
+
+            <!-- If there's a previous post, display it using the same markup included from - partials/post-card.hbs -->
+            
+                
+
+    <article class="post-card post-template">
+        
+            <a class="post-card-image-link" href="/ict-ison-imp">
+                <div class="post-card-image" style="background-image: url(/assets/built/images/ictCover.jpg)"></div>
+            </a>
+        
+        <div class="post-card-content">
+            <a class="post-card-content-link" href="/ict-ison-imp">
+                <header class="post-card-header">
+                    
+                        
+                            
+                                <span class="post-card-tags">Ict</span>
+                            
+                        
+                    
+
+                    <h2 class="post-card-title">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-26 Drone System Implementation</h2>
+                </header>
+                <section class="post-card-excerpt">
+                    
+                        <p></p>
+                    
+                </section>
+            </a>
+            <footer class="post-card-meta">
+                
+                    
+                        
+                        <img class="author-profile-image" src="/assets/built/images/quantum.png" alt="ChangHyeon Lee" />
+                        
+                        <span class="post-card-author">
+                            <a href="/author/karzito/">ChangHyeon Lee</a>
+                        </span>
+                    
+                
+                <span class="reading-time">
+                    
+                    
+                      1 min read
+                    
+                </span>
+            </footer>
+        </div>
+    </article>
+
+            
+
+        </div>
+    </div>
+</aside>
+
+<!-- Floating header which appears on-scroll, included from includes/floating-header.hbs -->
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="http://localhost:4000/">
+            
+            <span>POSTECH ICT V+ 4.0 CLASS</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/>
+</svg>
+</div>
+        <a class="floating-header-share-tw" href="https://twitter.com/share?text=POSTECH+ICT+V%2B+4.0+%EB%A7%A4%EC%B9%AD+%EA%B8%B0%EC%97%85+ISON+2021-05-10+Drone+Controller+Design&amp;url=https://karzito.github.io/ict-ison-ctrlr"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://karzito.github.io/ict-ison-ctrlr"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+
+        </a>
+    </div>
+    <progress class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+<!-- /post -->
+
+<!-- The #contentFor helper here will send everything inside it up to the matching #block helper found in default.hbs -->
+
+
+        <!-- Previous/next page links - displayed on every page -->
+        
+
+        <!-- The footer at the very bottom of the screen -->
+        <footer class="site-footer outer">
+            <div class="site-footer-content inner">
+                <section class="copyright"><a href="http://localhost:4000/">POSTECH ICT V+ 4.0 CLASS</a> &copy; 2021</section>
+                <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> &
+                    <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a> using
+                    <a href="https://github.com/jekyller/jasper2" target="_blank" rel="noopener">Jasper2</a></section>
+                <nav class="site-footer-nav">
+                    <a href="/">Latest Posts</a>
+                    
+                    
+                    <a href="https://ghost.org" target="_blank" rel="noopener">Ghost</a>
+                </nav>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- The big email subscribe modal content -->
+    
+
+    <!-- highlight.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.10.0/components/prism-abap.min.js"></script>
+    <script>$(document).ready(function() {
+      $('pre code').each(function(i, block) {
+        hljs.highlightBlock(block);
+      });
+    });</script>
+
+    <!-- jQuery + Fitvids, which makes all video embeds responsive -->
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="https://demo.ghost.io/assets/js/jquery.fitvids.js?v=724281a32e"></script>
+
+
+    <!-- Paginator increased to "infinit" in _config.yml -->
+    <!-- if paginator.posts  -->
+    <!-- <script>
+        var maxPages = parseInt('');
+    </script>
+    <script src="/assets/js/infinitescroll.js"></script> -->
+    <!-- /endif -->
+
+    
+
+
+    <!-- Add Google Analytics  -->
+    <!-- Google Analytics Tracking code -->
+ <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', '', 'auto');
+  ga('send', 'pageview');
+
+ </script>
+
+
+    <!-- The #block helper will pull in data from the #contentFor other template files. In this case, there's some JavaScript which we only want to use in post.hbs, but it needs to be included down here, after jQuery has already loaded. -->
+    
+        <script>
+
+// NOTE: Scroll performance is poor in Safari
+// - this appears to be due to the events firing much more slowly in Safari.
+//   Dropping the scroll event and using only a raf loop results in smoother
+//   scrolling but continuous processing even when not scrolling
+$(document).ready(function () {
+    // Start fitVids
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    // End fitVids
+
+    var progressBar = document.querySelector('progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        // show/hide floating header
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+});
+</script>
+
+    
+
+    <!-- Ghost outputs important scripts and data with this tag - it should always be the very last thing before the closing body tag -->
+    <!-- ghost_foot -->
+
+</body>
+</html>

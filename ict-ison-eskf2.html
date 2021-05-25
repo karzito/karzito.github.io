@@ -79,7 +79,7 @@ MathJax.Hub.Register.MessageHook("TeX Jax - parse error",function (message) {
     <meta property="og:site_name" content="POSTECH ICT V+ 4.0 CLASS" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_2" />
-    <meta property="og:description" content="ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 본 포스팅에서는 지난 시간에 정리한 Error-State Kalman Filter의 process 및 measurement noise matrices 계수 설정, 구현 코드 관련된 내용을 작성하고자 한다. 1. Process noise &amp; measurement noise matricies" />
+    <meta property="og:description" content="ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control 본 포스팅에서는 지난 시간에 정리한 Error-State Kalman Filter의 process 및 measurement noise matrices 계수 설정, 구현 코드" />
     <meta property="og:url" content="http://localhost:4000/ict-ison-eskf2" />
     <meta property="og:image" content="http://localhost:4000/assets/built/images/ictCover.jpg" />
     <meta property="article:publisher" content="https://www.facebook.com/" />
@@ -89,7 +89,7 @@ MathJax.Hub.Register.MessageHook("TeX Jax - parse error",function (message) {
     <meta property="article:tag" content="Ict" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_2" />
-    <meta name="twitter:description" content="ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 본 포스팅에서는 지난 시간에 정리한 Error-State Kalman Filter의 process 및 measurement noise matrices 계수 설정, 구현 코드 관련된 내용을 작성하고자 한다. 1. Process noise &amp; measurement noise matricies" />
+    <meta name="twitter:description" content="ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control 본 포스팅에서는 지난 시간에 정리한 Error-State Kalman Filter의 process 및 measurement noise matrices 계수 설정, 구현 코드" />
     <meta name="twitter:url" content="http://localhost:4000/" />
     <meta name="twitter:image" content="http://localhost:4000/assets/built/images/ictCover.jpg" />
     <meta name="twitter:label1" content="Written by" />
@@ -121,7 +121,7 @@ MathJax.Hub.Register.MessageHook("TeX Jax - parse error",function (message) {
         "@type": "WebPage",
         "@id": "http://localhost:4000/ict-ison-eskf2"
     },
-    "description": "ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 본 포스팅에서는 지난 시간에 정리한 Error-State Kalman Filter의 process 및 measurement noise matrices 계수 설정, 구현 코드 관련된 내용을 작성하고자 한다. 1. Process noise &amp; measurement noise matricies"
+    "description": "ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control 본 포스팅에서는 지난 시간에 정리한 Error-State Kalman Filter의 process 및 measurement noise matrices 계수 설정, 구현 코드"
 }
     </script>
 
@@ -221,6 +221,8 @@ into the {body} of the default.hbs template -->
     <li><a href="./ict-ison-meeting">2021-03-24 ISON Meeting</a></li>
     <li><a href="./ict-ison-eskf1">2021-04-07 ISON Development: Error-State Kalman Filter_1</a></li>
     <li><a href="./ict-ison-eskf2">2021-04-07 ISON Development: Error-State Kalman Filter_2</a></li>
+    <li><a href="./ict-ison-imp">2021-04-26 ISON Development: Drone System Implementation</a></li>
+    <li><a href="./ict-ison-ctrl">2021-05-10 ISON Development: Drone Control</a></li>
 </ul>
 
 <p>본 포스팅에서는 지난 시간에 정리한 <code class="highlighter-rouge">Error-State Kalman Filter</code>의 process 및 measurement noise matrices 계수 설정, 구현 코드 관련된 내용을 작성하고자 한다.</p>
@@ -570,6 +572,24 @@ where,</p>
                                 
                                   
                                     
+                                        
+                                        
+                                            <li><a href="/ict-ison-ctrlr">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design</a></li>
+                                        
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                            <li><a href="/ict-ison-imp">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-26 Drone System Implementation</a></li>
+                                        
+                                    
+                                  
+                                
+                                  
+                                    
                                   
                                 
                                   
@@ -587,16 +607,12 @@ where,</p>
                                     
                                         
                                         
-                                            <li><a href="/ict-ison-meeting">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-03-24 미팅 요약</a></li>
-                                        
                                     
                                   
                                 
                                   
                                     
                                         
-                                        
-                                            <li><a href="/ict-ison-meeting">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-03-02 미팅 요약</a></li>
                                         
                                     
                                   
@@ -606,7 +622,7 @@ where,</p>
                         <footer class="read-next-card-footer">
                             <a href="/tag/ict/">
                                 
-                                    See all 3 posts  →
+                                    See all 5 posts  →
                                 
                             </a>
                         </footer>
@@ -615,6 +631,55 @@ where,</p>
             
 
             <!-- If there's a next post, display it using the same markup included from - partials/post-card.hbs -->
+            
+                
+
+    <article class="post-card post-template">
+        
+            <a class="post-card-image-link" href="/ict-ison-imp">
+                <div class="post-card-image" style="background-image: url(/assets/built/images/ictCover.jpg)"></div>
+            </a>
+        
+        <div class="post-card-content">
+            <a class="post-card-content-link" href="/ict-ison-imp">
+                <header class="post-card-header">
+                    
+                        
+                            
+                                <span class="post-card-tags">Ict</span>
+                            
+                        
+                    
+
+                    <h2 class="post-card-title">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-26 Drone System Implementation</h2>
+                </header>
+                <section class="post-card-excerpt">
+                    
+                        <p></p>
+                    
+                </section>
+            </a>
+            <footer class="post-card-meta">
+                
+                    
+                        
+                        <img class="author-profile-image" src="/assets/built/images/quantum.png" alt="ChangHyeon Lee" />
+                        
+                        <span class="post-card-author">
+                            <a href="/author/karzito/">ChangHyeon Lee</a>
+                        </span>
+                    
+                
+                <span class="reading-time">
+                    
+                    
+                      1 min read
+                    
+                </span>
+            </footer>
+        </div>
+    </article>
+
             
 
             <!-- If there's a previous post, display it using the same markup included from - partials/post-card.hbs -->
