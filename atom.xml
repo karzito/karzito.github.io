@@ -8,7 +8,22 @@
     
       
       <item>
-        <title>POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design</title>
+        <title>POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (2)</title>
+        
+          <description>&lt;h1 id=&quot;15주차-드론-동역학-및-제어기-설계-2--210524210604&quot;&gt;15주차, 드론 동역학 및 제어기 설계 2  (21.05.24~21.06.04)&lt;/h1&gt;
+
+</description>
+        
+        <pubDate>Sun, 06 Jun 2021 08:11:00 +0900</pubDate>
+        <link>
+        http://localhost:4000/ict-ison-ctrlr_2</link>
+        <guid isPermaLink="true">http://localhost:4000/ict-ison-ctrlr_2</guid>
+      </item>
+      
+    
+      
+      <item>
+        <title>POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (1)</title>
         
           <description>&lt;h1 id=&quot;13주차-드론-동역학-및-제어기-설계-1-210510210521&quot;&gt;13주차, 드론 동역학 및 제어기 설계 1 (21.05.10~21.05.21)&lt;/h1&gt;
 
@@ -16,8 +31,8 @@
         
         <pubDate>Tue, 11 May 2021 08:11:00 +0900</pubDate>
         <link>
-        http://localhost:4000/ict-ison-ctrlr</link>
-        <guid isPermaLink="true">http://localhost:4000/ict-ison-ctrlr</guid>
+        http://localhost:4000/ict-ison-ctrlr_1</link>
+        <guid isPermaLink="true">http://localhost:4000/ict-ison-ctrlr_1</guid>
       </item>
       
     
@@ -47,7 +62,8 @@
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf1&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf2&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_2&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-imp&quot;&gt;2021-04-26 ISON Development: Drone System Implementation&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrl&quot;&gt;2021-05-10 ISON Development: Drone Control&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrl_1&quot;&gt;2021-05-10 ISON Development: Drone Control (1)&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrl_2&quot;&gt;2021-05-10 ISON Development: Drone Control (2)&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 </description>
@@ -70,7 +86,8 @@
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf1&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf2&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_2&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-imp&quot;&gt;2021-04-26 ISON Development: Drone System Implementation&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrl&quot;&gt;2021-05-10 ISON Development: Drone Control&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrl_1&quot;&gt;2021-05-10 ISON Development: Drone Control (1)&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrl_2&quot;&gt;2021-05-10 ISON Development: Drone Control (2)&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 </description>
@@ -108,7 +125,8 @@
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf1&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf2&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_2&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-imp&quot;&gt;2021-04-26 ISON Development: Drone System Implementation&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrl&quot;&gt;2021-05-10 ISON Development: Drone Control&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrl_1&quot;&gt;2021-05-10 ISON Development: Drone Control (1)&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrl_2&quot;&gt;2021-05-10 ISON Development: Drone Control (2)&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 </description>
@@ -131,7 +149,8 @@
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf1&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf2&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_2&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-imp&quot;&gt;2021-04-26 ISON Development: Drone System Implementation&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrl&quot;&gt;2021-05-10 ISON Development: Drone Control&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrl_1&quot;&gt;2021-05-10 ISON Development: Drone Control (1)&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrl_2&quot;&gt;2021-05-10 ISON Development: Drone Control (2)&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 </description>
