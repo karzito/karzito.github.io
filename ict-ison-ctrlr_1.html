@@ -79,7 +79,7 @@ MathJax.Hub.Register.MessageHook("TeX Jax - parse error",function (message) {
     <meta property="og:site_name" content="POSTECH ICT V+ 4.0 CLASS" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (1)" />
-    <meta property="og:description" content="13주차, 드론 동역학 및 제어기 설계 1 (21.05.10~21.05.21) 이번 13주차에서는 아래 추진일정에 따라 모션캡쳐 시스템을 활용한 드론 인식 및 측위 기술 개발에 관련한 내용을 포스팅한다. 지난 11주차 포스팅에서 드론 H/W를 제작하였다. 이제는 제작한 드론을 제어하기 위한 제어 S/W가 드론에 탑재되어야 한다. 드론 동역학 설명을 시작으로 드론 FC (Flight Controller)에 탑재될" />
+    <meta property="og:description" content="ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 13주차, 드론 동역학 및 제어기 설계 1" />
     <meta property="og:url" content="http://localhost:4000/ict-ison-ctrlr_1" />
     <meta property="og:image" content="http://localhost:4000/assets/built/images/ictCover.jpg" />
     <meta property="article:publisher" content="https://www.facebook.com/" />
@@ -89,7 +89,7 @@ MathJax.Hub.Register.MessageHook("TeX Jax - parse error",function (message) {
     <meta property="article:tag" content="Ict" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (1)" />
-    <meta name="twitter:description" content="13주차, 드론 동역학 및 제어기 설계 1 (21.05.10~21.05.21) 이번 13주차에서는 아래 추진일정에 따라 모션캡쳐 시스템을 활용한 드론 인식 및 측위 기술 개발에 관련한 내용을 포스팅한다. 지난 11주차 포스팅에서 드론 H/W를 제작하였다. 이제는 제작한 드론을 제어하기 위한 제어 S/W가 드론에 탑재되어야 한다. 드론 동역학 설명을 시작으로 드론 FC (Flight Controller)에 탑재될" />
+    <meta name="twitter:description" content="ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 13주차, 드론 동역학 및 제어기 설계 1" />
     <meta name="twitter:url" content="http://localhost:4000/" />
     <meta name="twitter:image" content="http://localhost:4000/assets/built/images/ictCover.jpg" />
     <meta name="twitter:label1" content="Written by" />
@@ -121,7 +121,7 @@ MathJax.Hub.Register.MessageHook("TeX Jax - parse error",function (message) {
         "@type": "WebPage",
         "@id": "http://localhost:4000/ict-ison-ctrlr_1"
     },
-    "description": "13주차, 드론 동역학 및 제어기 설계 1 (21.05.10~21.05.21) 이번 13주차에서는 아래 추진일정에 따라 모션캡쳐 시스템을 활용한 드론 인식 및 측위 기술 개발에 관련한 내용을 포스팅한다. 지난 11주차 포스팅에서 드론 H/W를 제작하였다. 이제는 제작한 드론을 제어하기 위한 제어 S/W가 드론에 탑재되어야 한다. 드론 동역학 설명을 시작으로 드론 FC (Flight Controller)에 탑재될"
+    "description": "ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 13주차, 드론 동역학 및 제어기 설계 1"
 }
     </script>
 
@@ -215,7 +215,19 @@ into the {body} of the default.hbs template -->
             
             <section class="post-full-content">
                 <div class="kg-card-markdown">
-                    <h1 id="13주차-드론-동역학-및-제어기-설계-1-210510210521">13주차, 드론 동역학 및 제어기 설계 1 (21.05.10~21.05.21)</h1>
+                    <p><span class="table-of-contents-list">ISON 개발 관련 목차 </span></p>
+<ul class="table-of-contents-list">
+    <li><a href="./ict-ison-meeting">2021-03-02 ISON Meeting</a></li>
+    <li><a href="./ict-ison-meeting">2021-03-24 ISON Meeting</a></li>
+    <li><a href="./ict-ison-eskf1">2021-04-07 ISON Development: Error-State Kalman Filter_1</a></li>
+    <li><a href="./ict-ison-eskf2">2021-04-07 ISON Development: Error-State Kalman Filter_2</a></li>
+    <li><a href="./ict-ison-imp">2021-04-26 ISON Development: Drone System Implementation</a></li>
+    <li><a href="./ict-ison-ctrlr_1">2021-05-10 ISON Development: Drone Control (1)</a></li>
+    <li><a href="./ict-ison-ctrlr_2">2021-06-10 ISON Development: Drone Control (2)</a></li>
+    <li><a href="./ict-ison-internship">2021-07-23 ISON Internship</a></li>
+</ul>
+
+<h1 id="13주차-드론-동역학-및-제어기-설계-1-210510210521">13주차, 드론 동역학 및 제어기 설계 1 (21.05.10~21.05.21)</h1>
 
 <p>이번 13주차에서는 아래 추진일정에 따라 모션캡쳐 시스템을 활용한 드론 인식 및 측위 기술 개발에 관련한 내용을 포스팅한다.</p>
 
@@ -672,6 +684,15 @@ I =  {\begin{bmatrix}{I_{xx}}&0&0\\0&{I_{zz}}&0\\0&0&{I_{zz}}\end{bmatrix}} ,{I_
                                     
                                         
                                         
+                                            <li><a href="/ict-ison-internship">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-07-23 Internship 관련 미팅</a></li>
+                                        
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
                                             <li><a href="/ict-ison-ctrlr_2">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (2)</a></li>
                                         
                                     
@@ -693,8 +714,6 @@ I =  {\begin{bmatrix}{I_{xx}}&0&0\\0&{I_{zz}}&0\\0&0&{I_{zz}}\end{bmatrix}} ,{I_
                                   
                                     
                                         
-                                        
-                                            <li><a href="/ict-ison-eskf2">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_2</a></li>
                                         
                                     
                                   
@@ -727,7 +746,7 @@ I =  {\begin{bmatrix}{I_{xx}}&0&0\\0&{I_{zz}}&0\\0&0&{I_{zz}}\end{bmatrix}} ,{I_
                         <footer class="read-next-card-footer">
                             <a href="/tag/ict/">
                                 
-                                    See all 6 posts  →
+                                    See all 7 posts  →
                                 
                             </a>
                         </footer>
