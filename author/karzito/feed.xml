@@ -4,7 +4,7 @@
   <generator uri="https://jekyllrb.com/" version="3.7.4">Jekyll</generator>
   <link href="http://localhost:4000/author/karzito/feed.xml" rel="self" type="application/atom+xml" />
   <link href="http://localhost:4000/" rel="alternate" type="text/html" />
-  <updated>2021-07-23T15:15:28+09:00</updated>
+  <updated>2021-08-13T10:29:11+09:00</updated>
   <id>http://localhost:4000/author/karzito/feed.xml</id>
 
   
@@ -39,8 +39,8 @@
       <id>http://localhost:4000/ict-ison-internship</id>
       <content type="html" xml:base="http://localhost:4000/ict-ison-internship">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf1&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf2&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_2&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-imp&quot;&gt;2021-04-26 ISON Development: Drone System Implementation&lt;/a&gt;&lt;/li&gt;
@@ -108,8 +108,8 @@
       <id>http://localhost:4000/ict-ison-ctrlr_2</id>
       <content type="html" xml:base="http://localhost:4000/ict-ison-ctrlr_2">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf1&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf2&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_2&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-imp&quot;&gt;2021-04-26 ISON Development: Drone System Implementation&lt;/a&gt;&lt;/li&gt;
@@ -268,8 +268,8 @@
       <id>http://localhost:4000/ict-ison-ctrlr_1</id>
       <content type="html" xml:base="http://localhost:4000/ict-ison-ctrlr_1">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf1&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf2&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_2&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-imp&quot;&gt;2021-04-26 ISON Development: Drone System Implementation&lt;/a&gt;&lt;/li&gt;
@@ -699,8 +699,8 @@ I =  {\begin{bmatrix}{I_{xx}}&amp;0&amp;0\\0&amp;{I_{zz}}&amp;0\\0&amp;0&amp;{I_
       <id>http://localhost:4000/ict-ison-imp</id>
       <content type="html" xml:base="http://localhost:4000/ict-ison-imp">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf1&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf2&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_2&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-imp&quot;&gt;2021-04-26 ISON Development: Drone System Implementation&lt;/a&gt;&lt;/li&gt;
@@ -1029,8 +1029,8 @@ I =  {\begin{bmatrix}{I_{xx}}&amp;0&amp;0\\0&amp;{I_{zz}}&amp;0\\0&amp;0&amp;{I_
       <id>http://localhost:4000/ict-ison-eskf2</id>
       <content type="html" xml:base="http://localhost:4000/ict-ison-eskf2">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf1&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf2&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_2&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-imp&quot;&gt;2021-04-26 ISON Development: Drone System Implementation&lt;/a&gt;&lt;/li&gt;
@@ -1352,8 +1352,8 @@ where,&lt;/p&gt;
       <id>http://localhost:4000/ict-ison-eskf1</id>
       <content type="html" xml:base="http://localhost:4000/ict-ison-eskf1">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf1&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf2&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_2&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-imp&quot;&gt;2021-04-26 ISON Development: Drone System Implementation&lt;/a&gt;&lt;/li&gt;
@@ -2013,14 +2013,14 @@ HEROPY Tech님 마크다운 문법 포스팅: &lt;a href=&quot;https://heropy.bl
   
     <entry>
       <title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-03-02 미팅 요약</title>
-      <link href="http://localhost:4000/ict-ison-meeting" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-03-02 미팅 요약" />
+      <link href="http://localhost:4000/ict-ison-meeting_1" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-03-02 미팅 요약" />
       <published>2021-03-03T08:11:00+09:00</published>
       <updated>2021-03-03T08:11:00+09:00</updated>
-      <id>http://localhost:4000/ict-ison-meeting</id>
-      <content type="html" xml:base="http://localhost:4000/ict-ison-meeting">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+      <id>http://localhost:4000/ict-ison-meeting_1</id>
+      <content type="html" xml:base="http://localhost:4000/ict-ison-meeting_1">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf1&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf2&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_2&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-imp&quot;&gt;2021-04-26 ISON Development: Drone System Implementation&lt;/a&gt;&lt;/li&gt;
@@ -2085,14 +2085,14 @@ HEROPY Tech님 마크다운 문법 포스팅: &lt;a href=&quot;https://heropy.bl
   
     <entry>
       <title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-03-24 미팅 요약</title>
-      <link href="http://localhost:4000/ict-ison-meeting" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-03-24 미팅 요약" />
+      <link href="http://localhost:4000/ict-ison-meeting_2" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-03-24 미팅 요약" />
       <published>2021-03-03T08:11:00+09:00</published>
       <updated>2021-03-03T08:11:00+09:00</updated>
-      <id>http://localhost:4000/ict-ison-meeting</id>
-      <content type="html" xml:base="http://localhost:4000/ict-ison-meeting">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+      <id>http://localhost:4000/ict-ison-meeting_2</id>
+      <content type="html" xml:base="http://localhost:4000/ict-ison-meeting_2">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf1&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf2&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_2&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-imp&quot;&gt;2021-04-26 ISON Development: Drone System Implementation&lt;/a&gt;&lt;/li&gt;
