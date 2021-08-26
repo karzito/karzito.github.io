@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-08-13T10:29:11+09:00</updated><id>http://localhost:4000/</id><title type="html">POSTECH ICT V+ 4.0 CLASS</title><subtitle>ENTERPRISE: ISON</subtitle><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-07-23 Internship 관련 미팅</title><link href="http://localhost:4000/ict-ison-internship" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-07-23 Internship 관련 미팅" /><published>2021-07-23T08:11:00+09:00</published><updated>2021-07-23T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-internship</id><content type="html" xml:base="http://localhost:4000/ict-ison-internship">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-08-26T11:09:17+09:00</updated><id>http://localhost:4000/</id><title type="html">POSTECH ICT V+ 4.0 CLASS</title><subtitle>ENTERPRISE: ISON</subtitle><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-08-25 Internship 관련 최종 미팅</title><link href="http://localhost:4000/ict-ison-internship2" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-08-25 Internship 관련 최종 미팅" /><published>2021-08-26T08:11:00+09:00</published><updated>2021-08-26T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-internship2</id><content type="html" xml:base="http://localhost:4000/ict-ison-internship2">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
@@ -8,6 +8,76 @@
     &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_1&quot;&gt;2021-05-10 ISON Development: Drone Control (1)&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_2&quot;&gt;2021-06-10 ISON Development: Drone Control (2)&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-internship&quot;&gt;2021-07-23 ISON Internship&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-internship2&quot;&gt;2021-08-25 ISON Internship final&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;혁신인재 4.0 하계 인턴쉽 관련하여 결과물에 대한 최종 발표를 이스온 본사에서 진행하였다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;비행 상황에 따른 드론 소비 전력 분석&lt;/code&gt;에 대한 조사 결과를 발표하였으며, 결과를 요약한 표는 아래와 같다.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;호버링&lt;/th&gt;
+      &lt;th&gt;상승&lt;/th&gt;
+      &lt;th&gt;하강&lt;/th&gt;
+      &lt;th&gt;전진 비행&lt;/th&gt;
+      &lt;th&gt;지면 효과&lt;/th&gt;
+      &lt;th&gt;날씨 효과&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;100&lt;/td&gt;
+      &lt;td&gt;100 ~ 160&lt;/td&gt;
+      &lt;td&gt;100 ~ 120&lt;/td&gt;
+      &lt;td&gt;55 ~ 160&lt;/td&gt;
+      &lt;td&gt;75 ~ 100&lt;/td&gt;
+      &lt;td&gt;95 ~ 105 *최대 120&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;위의 내용은 아래와 같이 간략하게 설명할 수 있다.&lt;/p&gt;
+
+&lt;h1 id=&quot;1-상승-비행&quot;&gt;1. 상승 비행&lt;/h1&gt;
+
+&lt;p&gt;드론 상승 시, 공력 이론에 의한 아래의 수식을 이용하여 추가 전력 소모를 계산할 수 있다.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{P_{h} + \triangle P}{P_{h}} = \frac{V_{c}}{2v_{h}} + \sqrt{\left(\frac{v_c}{2v_h}\right)^2+1} \approx 1 + \frac{V_c}{2v_h} \\
+v_{h} \equiv v_{i} = \sqrt{\frac{T}{2\rho A}} = \sqrt{\left(\frac{T}{A}\right)\frac{1}{2\rho}}&lt;/script&gt;
+
+&lt;h1 id=&quot;2-하강-비행&quot;&gt;2. 하강 비행&lt;/h1&gt;
+
+&lt;p&gt;드론 하강의 경우, 호버링보다 적은 전력을 소모할 것으로 기대되지만 실제로는 그렇지 않다. 드론 하강 시, 프로펠러가 공기의 후류 영역 안으로 들어가 와류의 영향을 받으면서 효율적으로
+양력을 생성하지 못하기 때문이다. 하강 속도가 프로펠러의 유도 속도와 비슷할 정도로 빨라지면 프로펠러에서 밀어준 공기가 프로펠러를 떠나지 못하고 프로펠러 주위를 맴도는 와류가 발생하게 된다.
+이러한 현상이 발생하면 정상적으로 양력이 발생하지 않아 드론이 추락하거나 조종성을 잃어버릴 수 있다.&lt;/p&gt;
+
+&lt;h1 id=&quot;3-전진-비행&quot;&gt;3. 전진 비행&lt;/h1&gt;
+
+&lt;p&gt;드론의 전진 비행의 경우 전진 속도에 따라 필요한 전력이 크게 달라진다. 저속 비행의 경우 병진 양력(translational lift)에 의한 효과로 프로펠러의 후류를 뒤로 보내기 때문에 오히려 비행 효율이 올라가게 된다. 하지만 속도가 올라감에 따라 항력이 증가하여 병진 양력 효과를 추월하면 비행 효율이 떨어지게 된다.&lt;/p&gt;
+
+&lt;h1 id=&quot;4-지면-효과&quot;&gt;4. 지면 효과&lt;/h1&gt;
+
+&lt;p&gt;드론이 지면 근처에서 비행할 경우, 두가지 효과로 인해 비행 효율이 올라가게 된다. 첫번째로는 분수 효과를 들 수 있다. 분수 효과는 프로펠러에서 빠져나온 공기가 지면과 부딪힌 후에 반사되어 올라와 드론을 밀어주는 효과이다. 또한 프로펠러의 끝에서 발생하는 와류가 지면에 막혀 사라지게 되고 이로인해 비행 효율이 올라가게 되는 효과도 존재한다. 이 두가지 효과로 인해 지면 근처에서 비행 효율이 증가하게 된다.&lt;/p&gt;
+
+&lt;h1 id=&quot;5-날씨-효과&quot;&gt;5. 날씨 효과&lt;/h1&gt;
+
+&lt;p&gt;비나 눈은 드론의 공력 발생에 영향을 미치지 않는다. 다만 비나 눈이 내리는 경우 발생하는 저기압 및 강풍으로 인해 효율이 떨어지게 된다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/Internship/Internship_final.jpg&quot; alt=&quot;Summary&quot; /&gt;
+&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-07-23 Internship 관련 미팅</title><link href="http://localhost:4000/ict-ison-internship" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-07-23 Internship 관련 미팅" /><published>2021-07-23T08:11:00+09:00</published><updated>2021-07-23T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-internship</id><content type="html" xml:base="http://localhost:4000/ict-ison-internship">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+&lt;ul class=&quot;table-of-contents-list&quot;&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf1&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_1&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf2&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_2&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-imp&quot;&gt;2021-04-26 ISON Development: Drone System Implementation&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_1&quot;&gt;2021-05-10 ISON Development: Drone Control (1)&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_2&quot;&gt;2021-06-10 ISON Development: Drone Control (2)&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-internship&quot;&gt;2021-07-23 ISON Internship&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-internship2&quot;&gt;2021-08-25 ISON Internship final&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;혁신인재 4.0 하계 인턴쉽 관련한 미팅을 이스온 본사에서 진행하였다.&lt;/p&gt;
@@ -33,7 +103,7 @@
 
 &lt;p align=&quot;center&quot;&gt;
     &lt;img src=&quot;assets/built/images/Internship/Internship.jpg&quot; alt=&quot;Summary&quot; /&gt;
-&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (2)</title><link href="http://localhost:4000/ict-ison-ctrlr_2" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (2)" /><published>2021-06-06T08:11:00+09:00</published><updated>2021-06-06T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-ctrlr_2</id><content type="html" xml:base="http://localhost:4000/ict-ison-ctrlr_2">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (2)</title><link href="http://localhost:4000/ict-ison-ctrlr_2" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (2)" /><published>2021-06-06T08:11:00+09:00</published><updated>2021-06-06T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-ctrlr_2</id><content type="html" xml:base="http://localhost:4000/ict-ison-ctrlr_2">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
@@ -43,6 +113,7 @@
     &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_1&quot;&gt;2021-05-10 ISON Development: Drone Control (1)&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_2&quot;&gt;2021-06-10 ISON Development: Drone Control (2)&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-internship&quot;&gt;2021-07-23 ISON Internship&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-internship2&quot;&gt;2021-08-25 ISON Internship final&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h1 id=&quot;15주차-드론-동역학-및-제어기-설계-2--210524210604&quot;&gt;15주차, 드론 동역학 및 제어기 설계 2  (21.05.24~21.06.04)&lt;/h1&gt;
@@ -159,7 +230,7 @@
 
 &lt;p&gt;Euler Angle&lt;/p&gt;
 
-&lt;p&gt;영상과 Position, Euler Angle을 나타낸 플랏에도 알 수 있듯이 Reference value에 잘 수렴하고, 드론이 안정적으로 동작하는 것을 확인할 수 있다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (1)</title><link href="http://localhost:4000/ict-ison-ctrlr_1" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (1)" /><published>2021-05-11T08:11:00+09:00</published><updated>2021-05-11T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-ctrlr_1</id><content type="html" xml:base="http://localhost:4000/ict-ison-ctrlr_1">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;영상과 Position, Euler Angle을 나타낸 플랏에도 알 수 있듯이 Reference value에 잘 수렴하고, 드론이 안정적으로 동작하는 것을 확인할 수 있다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (1)</title><link href="http://localhost:4000/ict-ison-ctrlr_1" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (1)" /><published>2021-05-11T08:11:00+09:00</published><updated>2021-05-11T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-ctrlr_1</id><content type="html" xml:base="http://localhost:4000/ict-ison-ctrlr_1">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
@@ -169,6 +240,7 @@
     &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_1&quot;&gt;2021-05-10 ISON Development: Drone Control (1)&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_2&quot;&gt;2021-06-10 ISON Development: Drone Control (2)&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-internship&quot;&gt;2021-07-23 ISON Internship&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-internship2&quot;&gt;2021-08-25 ISON Internship final&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h1 id=&quot;13주차-드론-동역학-및-제어기-설계-1-210510210521&quot;&gt;13주차, 드론 동역학 및 제어기 설계 1 (21.05.10~21.05.21)&lt;/h1&gt;
@@ -556,7 +628,7 @@ I =  {\begin{bmatrix}{I_{xx}}&amp;0&amp;0\\0&amp;{I_{zz}}&amp;0\\0&amp;0&amp;{I_
            &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;           &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;  
     &lt;span class=&quot;n&quot;&gt;R&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;R_z&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;R_y&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;R_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-26 Drone System Implementation</title><link href="http://localhost:4000/ict-ison-imp" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-26 Drone System Implementation" /><published>2021-04-27T08:11:00+09:00</published><updated>2021-04-27T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-imp</id><content type="html" xml:base="http://localhost:4000/ict-ison-imp">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-26 Drone System Implementation</title><link href="http://localhost:4000/ict-ison-imp" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-26 Drone System Implementation" /><published>2021-04-27T08:11:00+09:00</published><updated>2021-04-27T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-imp</id><content type="html" xml:base="http://localhost:4000/ict-ison-imp">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
@@ -566,6 +638,7 @@ I =  {\begin{bmatrix}{I_{xx}}&amp;0&amp;0\\0&amp;{I_{zz}}&amp;0\\0&amp;0&amp;{I_
     &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_1&quot;&gt;2021-05-10 ISON Development: Drone Control (1)&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_2&quot;&gt;2021-06-10 ISON Development: Drone Control (2)&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-internship&quot;&gt;2021-07-23 ISON Internship&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-internship2&quot;&gt;2021-08-25 ISON Internship final&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h1 id=&quot;11주차-드론-제작210426210507&quot;&gt;11주차, 드론 제작(21.04.26~21.05.07)&lt;/h1&gt;
@@ -852,7 +925,7 @@ I =  {\begin{bmatrix}{I_{xx}}&amp;0&amp;0\\0&amp;{I_{zz}}&amp;0\\0&amp;0&amp;{I_
 
 &lt;p align=&quot;center&quot;&gt;
     &lt;img src=&quot;assets/built/images/Imp/Untitled 25.png&quot; alt=&quot;untitled&quot; /&gt;
-&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_2</title><link href="http://localhost:4000/ict-ison-eskf2" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_2" /><published>2021-04-21T08:11:00+09:00</published><updated>2021-04-21T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-eskf2</id><content type="html" xml:base="http://localhost:4000/ict-ison-eskf2">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_2</title><link href="http://localhost:4000/ict-ison-eskf2" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_2" /><published>2021-04-21T08:11:00+09:00</published><updated>2021-04-21T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-eskf2</id><content type="html" xml:base="http://localhost:4000/ict-ison-eskf2">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
@@ -862,6 +935,7 @@ I =  {\begin{bmatrix}{I_{xx}}&amp;0&amp;0\\0&amp;{I_{zz}}&amp;0\\0&amp;0&amp;{I_
     &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_1&quot;&gt;2021-05-10 ISON Development: Drone Control (1)&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_2&quot;&gt;2021-06-10 ISON Development: Drone Control (2)&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-internship&quot;&gt;2021-07-23 ISON Internship&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-internship2&quot;&gt;2021-08-25 ISON Internship final&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;본 포스팅에서는 지난 시간에 정리한 &lt;code class=&quot;highlighter-rouge&quot;&gt;Error-State Kalman Filter&lt;/code&gt;의 process 및 measurement noise matrices 계수 설정, 구현 코드 관련된 내용을 작성하고자 한다.&lt;/p&gt;
@@ -1141,7 +1215,7 @@ where,&lt;/p&gt;
 //	ins-&amp;gt;x[6] = ins-&amp;gt;x[6]/qNorm; ins-&amp;gt;x[7] = ins-&amp;gt;x[7]/qNorm; ins-&amp;gt;x[8] = ins-&amp;gt;x[8]/qNorm; ins-&amp;gt;x[9] = ins-&amp;gt;x[9]/qNorm;
 &lt;/span&gt;	&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_1</title><link href="http://localhost:4000/ict-ison-eskf1" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_1" /><published>2021-04-07T08:11:00+09:00</published><updated>2021-04-07T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-eskf1</id><content type="html" xml:base="http://localhost:4000/ict-ison-eskf1">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_1</title><link href="http://localhost:4000/ict-ison-eskf1" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_1" /><published>2021-04-07T08:11:00+09:00</published><updated>2021-04-07T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-eskf1</id><content type="html" xml:base="http://localhost:4000/ict-ison-eskf1">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
@@ -1151,6 +1225,7 @@ where,&lt;/p&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_1&quot;&gt;2021-05-10 ISON Development: Drone Control (1)&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_2&quot;&gt;2021-06-10 ISON Development: Drone Control (2)&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-internship&quot;&gt;2021-07-23 ISON Internship&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-internship2&quot;&gt;2021-08-25 ISON Internship final&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;2021-03-24 ISON Meeting 포스팅에 게재했듯이, 혁신인재 4.0 이스온팀의 개발 목표는 &lt;code class=&quot;highlighter-rouge&quot;&gt;광학 측위 시스템 기반 precision landing&lt;/code&gt; 기법을 연구하는 것이다. 연구를 위한 드론 기체 제작을 위해 주문한 부품 중 일부가 해외 배송 건으로, 도착하는데 시간이 걸리기 때문에 기체 제작에 앞서 세부 개발 목표 중 하나인 광학 측위 시스템을 활용한 navigation system 개발을 진행하도록 한다. Navigation system 알고리즘은 IMU 정보로 부터 계산한 측위 정보와 광학 측위 시스템을 기반으로 측정한 측위 정보를 error-state Kalman filter (ESKF)를 활용하여 fusion하는 형태로 구현한다. 해당 알고리즘은 다음의 논문을 참고하여 구현되었다: &lt;a href=&quot;http://www.iri.upc.edu/people/jsola/JoanSola/objectes/notes/kinematics.pdf&quot;&gt;Quaternion kinematics for the error-state Kalman filter&lt;/a&gt;&lt;br /&gt;&lt;/p&gt;
@@ -1495,7 +1570,7 @@ where,&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;다음 포스팅은 해당 알고리즘에 대한 c 코드 작성에 대한 내용을 담을 예정이다. 이 후, 드론 기체 제작에 필요한 부품들이 모두 도착하면 기체를 제작하고 알고리즘 검증과 관련된 내용을 진행하도록 한다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship</summary></entry><entry><title type="html">[Markdown Tutorial] 마크다운 기본 문법 정리</title><link href="http://localhost:4000/markdown-tutorial" rel="alternate" type="text/html" title="[Markdown Tutorial] 마크다운 기본 문법 정리" /><published>2021-03-04T08:11:00+09:00</published><updated>2021-03-04T08:11:00+09:00</updated><id>http://localhost:4000/markdown-tutorial</id><content type="html" xml:base="http://localhost:4000/markdown-tutorial">&lt;p&gt;Github blog posting 하는데 필요한 markdown 기본 문법에 대해서 정리할 예정이다. 일단은 당장 필요한 간단한 문법 정도만 정리하고, 추가적으로 필요한 문법들 알아갈때마다 추가적으로 정리하도록 한다.&lt;/p&gt;
+&lt;p&gt;다음 포스팅은 해당 알고리즘에 대한 c 코드 작성에 대한 내용을 담을 예정이다. 이 후, 드론 기체 제작에 필요한 부품들이 모두 도착하면 기체를 제작하고 알고리즘 검증과 관련된 내용을 진행하도록 한다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final</summary></entry><entry><title type="html">[Markdown Tutorial] 마크다운 기본 문법 정리</title><link href="http://localhost:4000/markdown-tutorial" rel="alternate" type="text/html" title="[Markdown Tutorial] 마크다운 기본 문법 정리" /><published>2021-03-04T08:11:00+09:00</published><updated>2021-03-04T08:11:00+09:00</updated><id>http://localhost:4000/markdown-tutorial</id><content type="html" xml:base="http://localhost:4000/markdown-tutorial">&lt;p&gt;Github blog posting 하는데 필요한 markdown 기본 문법에 대해서 정리할 예정이다. 일단은 당장 필요한 간단한 문법 정도만 정리하고, 추가적으로 필요한 문법들 알아갈때마다 추가적으로 정리하도록 한다.&lt;/p&gt;
 
 &lt;p&gt;아래의 글은 마크다운 관련 포스팅을 참고하여 필요한 부분을 정리하였으며, 참조링크는 문서 하단에 표기하였다.&lt;/p&gt;
 
@@ -1752,6 +1827,7 @@ HEROPY Tech님 마크다운 문법 포스팅: &lt;a href=&quot;https://heropy.bl
     &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_1&quot;&gt;2021-05-10 ISON Development: Drone Control (1)&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_2&quot;&gt;2021-06-10 ISON Development: Drone Control (2)&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-internship&quot;&gt;2021-07-23 ISON Internship&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-internship2&quot;&gt;2021-08-25 ISON Internship final&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;hr /&gt;
@@ -1796,7 +1872,7 @@ HEROPY Tech님 마크다운 문법 포스팅: &lt;a href=&quot;https://heropy.bl
 
 &lt;p&gt;추후 개발된 경로를 추종을 위해 cascade 형태의 PID 제어기를 활용하여 경로 추종 제어기를 구성할 예정이다.&lt;/p&gt;
 
-&lt;p&gt;관련 미팅 내용은 이와 같았으며, 1차 개발 세부 목표인 측위 시스템을 활용한 드론 인식 기술 개발을 진행하도록 한다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-03-02 미팅 요약</title><link href="http://localhost:4000/ict-ison-meeting_1" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-03-02 미팅 요약" /><published>2021-03-03T08:11:00+09:00</published><updated>2021-03-03T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-meeting_1</id><content type="html" xml:base="http://localhost:4000/ict-ison-meeting_1">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;관련 미팅 내용은 이와 같았으며, 1차 개발 세부 목표인 측위 시스템을 활용한 드론 인식 기술 개발을 진행하도록 한다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-03-02 미팅 요약</title><link href="http://localhost:4000/ict-ison-meeting_1" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-03-02 미팅 요약" /><published>2021-03-03T08:11:00+09:00</published><updated>2021-03-03T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-meeting_1</id><content type="html" xml:base="http://localhost:4000/ict-ison-meeting_1">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting&lt;/a&gt;&lt;/li&gt;
@@ -1806,6 +1882,7 @@ HEROPY Tech님 마크다운 문법 포스팅: &lt;a href=&quot;https://heropy.bl
     &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_1&quot;&gt;2021-05-10 ISON Development: Drone Control (1)&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_2&quot;&gt;2021-06-10 ISON Development: Drone Control (2)&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-internship&quot;&gt;2021-07-23 ISON Internship&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-internship2&quot;&gt;2021-08-25 ISON Internship final&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;hr /&gt;
@@ -1834,4 +1911,4 @@ HEROPY Tech님 마크다운 문법 포스팅: &lt;a href=&quot;https://heropy.bl
     Precision landing with marker based vision system concept diagram
 &lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;드론 스테이션&lt;/code&gt;에 착륙을 희망하는 드론은 GPS 기반으로 비행하여 카메라의 측정 반경 내부로 들어오게 되고, 이후 높은 위치 추정 정확도를 가지는 vision system의 정보를 기반으로 드론은 원하는 위치에 정확하게 landing할 수 있다. 이를 실제로 구현하기 위해서 비, 안개, 그리고 강한 햇빛 등의 외부 환경에서도 marker를 측정할 수 있는 active marker 시스템 구현 및 검증 그리고 드론이 panel과 가까워졌을 때 발생하는 ground effect를 고려할 수 있는 제어기 구성 등 세부적으로 고려해야할 개발 사항이 존재한다. 이러한 부분들에 대해서는 추후 미팅을 진행하면서 개발 방향을 잡아가도록 한다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship</summary></entry></feed>
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;드론 스테이션&lt;/code&gt;에 착륙을 희망하는 드론은 GPS 기반으로 비행하여 카메라의 측정 반경 내부로 들어오게 되고, 이후 높은 위치 추정 정확도를 가지는 vision system의 정보를 기반으로 드론은 원하는 위치에 정확하게 landing할 수 있다. 이를 실제로 구현하기 위해서 비, 안개, 그리고 강한 햇빛 등의 외부 환경에서도 marker를 측정할 수 있는 active marker 시스템 구현 및 검증 그리고 드론이 panel과 가까워졌을 때 발생하는 ground effect를 고려할 수 있는 제어기 구성 등 세부적으로 고려해야할 개발 사항이 존재한다. 이러한 부분들에 대해서는 추후 미팅을 진행하면서 개발 방향을 잡아가도록 한다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting 2021-03-24 ISON Meeting 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final</summary></entry></feed>
