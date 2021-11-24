@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-11-01T20:39:31+09:00</updated><id>http://localhost:4000/</id><title type="html">POSTECH ICT V+ 4.0 CLASS</title><subtitle>ENTERPRISE: ISON</subtitle><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-10-26 크로스터치 워크샵 관련 미팅</title><link href="http://localhost:4000/ict-ison-meeting_3" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-10-26 크로스터치 워크샵 관련 미팅" /><published>2021-11-01T08:11:00+09:00</published><updated>2021-11-01T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-meeting_3</id><content type="html" xml:base="http://localhost:4000/ict-ison-meeting_3">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-11-24T18:28:32+09:00</updated><id>http://localhost:4000/</id><title type="html">POSTECH ICT V+ 4.0 CLASS</title><subtitle>ENTERPRISE: ISON</subtitle><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-11-24 Nonlinear Disturbance Observer</title><link href="http://localhost:4000/ict-ison-ndob" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-11-24 Nonlinear Disturbance Observer" /><published>2021-11-23T08:11:00+09:00</published><updated>2021-11-23T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-ndob</id><content type="html" xml:base="http://localhost:4000/ict-ison-ndob">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting_2&lt;/a&gt;&lt;/li&gt;
@@ -12,6 +12,61 @@
     &lt;li&gt;&lt;a href=&quot;./ict-ison-semester2-plan&quot;&gt;2021-09-24 ISON Semester2 Plan&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-motor-ctrlr&quot;&gt;2021-10-07 ISON Motor Controller Implementaion&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_3&quot;&gt;2021-10-26 ISON Meeting_3&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ndob&quot;&gt;2021-10-26 ISON Nonlinear Disturbance Observer&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Disturbance observer (DOB)는 disturbance 및 uncertainty를 고려하기 위해서 활용된 대표적인 제어기 중 하나이다. DOB의 원리는 다음과 같다. 시스템의 모델을 알고있을 경우 시스템의 임의의 input에 대한 모델의 반응을 예측할 수 있는데, 이를 제외한 나머지 부분을 disturbance로 취급하고 이를 보상하는 형태의 제어기이다. 멀티로터 시스템의 경우 nonlinearity를 가지기 때문에 이에 대한 개념을 포함하는 nonlinear disturbance observer로 명명한다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/plan/NDOB.png&quot; alt=&quot;Summary&quot; /&gt;
+    [Concept Diagram of Nonlinear Disturbance Observer for a quadcopter]
+&lt;/p&gt;
+
+&lt;p&gt;해당 알고리즘을 고전 PD 제어기와 비교하여 1. System uncertainty에 대한 rejection 성능 2. wind disturbance rejection 성능을 평가한다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;System uncertainty rejection&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;드론의 hovering에 영향을 미치는 uncertainty는 주로 몇가지 성분이 있다. 첫째로는 드론의 mass를 완벽히 정확하게 측정할 수 없는 것이고, 두번째는 정확한 mass를 알고있더라도 해당 mass 만큼의 추력을 발생시키도록 완벽하게 프로펠러-모터 시스템을 제어할 수 없다는 것이다. 마지막으로 aerodynamics로 인해 발생하는 복잡한 외력으로 인해 정확한 hovering 위치에 도달할 수 없다는 문제가있다. 이러한 문제를 해결하고자 고전 제어기에는 적분 성분을 제어기에 포함하는데, 본 포스팅에서는 system uncertainty를 고안한 알고리즘이 얼마나 잘 rejection하는지 평가하기 위해서 적분기를 제외한 PD 제어기만을 이용하여 성능을 비교하도록 한다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/NDOB/pd_hovering.png&quot; alt=&quot;Summary&quot; /&gt;
+    &lt;img src=&quot;assets/built/images/NDOB/pd_ndob.png&quot; alt=&quot;Summary&quot; /&gt;
+    [Comparison of PD and PD+NDOB hovering test]
+&lt;/p&gt;
+
+&lt;p&gt;그림에서 확인할 수 있듯이, PD제어기만으로는 위에서 언급한 uncertainty들을 충분히 고려하지 못해 목표 위치까지 떠오르지 못한 반면, NDOB를 활용한 경우 해당 unceratainty를 고려하여 기존의 문제를 해결한 것을 알 수 있다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Wind disturbance rejection&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Wind disturbance 상에서 바람에 의해 밀려나는 정도를 측정하여 알고리즘의 성능을 평가하도록 한다.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+    &lt;img src=&quot;assets/built/images/NDOB/ndob_wind.png&quot; alt=&quot;Summary&quot; /&gt;
+    &lt;img src=&quot;assets/built/images/NDOB/pd_wind.png&quot; alt=&quot;Summary&quot; /&gt;
+    [Comparison of PD and PD+NDOB wind disturbance rejection test]
+&lt;/p&gt;
+
+&lt;p&gt;PD 제어기 및 PD+NDOB 제어기의 밀려난 정도를 RMSE로 표현하면 각각 0.3656 [m], 0.2868 [m] 임을 확인할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;위의 실험 결과에서 확인할 수 있듯이, 제안한 NDOB 방식이 system uncertainty 및 external disturbance를 rejection하는데 효과가 있는 것을 확인할 수 있다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting_1 2021-03-24 ISON Meeting_2 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final 2021-09-24 ISON Semester2 Plan 2021-10-07 ISON Motor Controller Implementaion 2021-10-26 ISON Meeting_3 2021-10-26 ISON Nonlinear Disturbance Observer</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-10-26 크로스터치 워크샵 관련 미팅</title><link href="http://localhost:4000/ict-ison-meeting_3" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-10-26 크로스터치 워크샵 관련 미팅" /><published>2021-11-01T08:11:00+09:00</published><updated>2021-11-01T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-meeting_3</id><content type="html" xml:base="http://localhost:4000/ict-ison-meeting_3">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+&lt;ul class=&quot;table-of-contents-list&quot;&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting_1&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting_2&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf1&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_1&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf2&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_2&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-imp&quot;&gt;2021-04-26 ISON Development: Drone System Implementation&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_1&quot;&gt;2021-05-10 ISON Development: Drone Control (1)&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_2&quot;&gt;2021-06-10 ISON Development: Drone Control (2)&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-internship&quot;&gt;2021-07-23 ISON Internship&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-internship2&quot;&gt;2021-08-25 ISON Internship final&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-semester2-plan&quot;&gt;2021-09-24 ISON Semester2 Plan&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-motor-ctrlr&quot;&gt;2021-10-07 ISON Motor Controller Implementaion&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_3&quot;&gt;2021-10-26 ISON Meeting_3&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ndob&quot;&gt;2021-10-26 ISON Nonlinear Disturbance Observer&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;10/26 (화) 이스온 본사에서 크로스터치 워크샵에서 발표할 내용에 대한 검수를 진행하기 위한 미팅을 진행하였다.&lt;/p&gt;
@@ -35,7 +90,7 @@
     &lt;p&gt;드론 측위 방법
  현재 드론 실험을 진행하기 위해 정밀 광학 측위 시스템인 optitrack을 활용하고 있다.&lt;/p&gt;
   &lt;/li&gt;
-&lt;/ol&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting_1 2021-03-24 ISON Meeting_2 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final 2021-09-24 ISON Semester2 Plan 2021-10-07 ISON Motor Controller Implementaion 2021-10-26 ISON Meeting_3</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-10-07 모터 제어</title><link href="http://localhost:4000/ict-ison-motor-ctrlr" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-10-07 모터 제어" /><published>2021-10-08T08:11:00+09:00</published><updated>2021-10-08T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-motor-ctrlr</id><content type="html" xml:base="http://localhost:4000/ict-ison-motor-ctrlr">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+&lt;/ol&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting_1 2021-03-24 ISON Meeting_2 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final 2021-09-24 ISON Semester2 Plan 2021-10-07 ISON Motor Controller Implementaion 2021-10-26 ISON Meeting_3 2021-10-26 ISON Nonlinear Disturbance Observer</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-10-07 모터 제어</title><link href="http://localhost:4000/ict-ison-motor-ctrlr" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-10-07 모터 제어" /><published>2021-10-08T08:11:00+09:00</published><updated>2021-10-08T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-motor-ctrlr</id><content type="html" xml:base="http://localhost:4000/ict-ison-motor-ctrlr">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting_2&lt;/a&gt;&lt;/li&gt;
@@ -49,6 +104,7 @@
     &lt;li&gt;&lt;a href=&quot;./ict-ison-semester2-plan&quot;&gt;2021-09-24 ISON Semester2 Plan&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-motor-ctrlr&quot;&gt;2021-10-07 ISON Motor Controller Implementaion&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_3&quot;&gt;2021-10-26 ISON Meeting_3&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ndob&quot;&gt;2021-10-26 ISON Nonlinear Disturbance Observer&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;현재 드론 시스템의 pulse width modulation (PWM) to motor thrust 출력단은 기존의 system identification을 진행한 결과를 사용하고 있다. System identification을 통해 얻어진 결과는 특정 PWM애서 어떠한 thrust가 출력되는지에 대한 mapping function이며, 해당 방식을 활용할 경우 open loop 원하는 thrust에 대한 PWM을 feed-back control loop 없이 직접 인가할 수 있기 때문에 반응성이 빠르다는 장점이 있지만 공정상의 문제로 모터 스펙이 달라지거나 배터리 전압이 변하는 경우에 대한 robust 문제에 취약하다는 단점이 있다.&lt;/p&gt;
@@ -67,7 +123,7 @@
     [Concept Diagram of The Motor Velocity Control ]
 &lt;/p&gt;
 
-&lt;p&gt;이 후, 해당 방식을 드론 비행에 적용할 예정이다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting_1 2021-03-24 ISON Meeting_2 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final 2021-09-24 ISON Semester2 Plan 2021-10-07 ISON Motor Controller Implementaion 2021-10-26 ISON Meeting_3</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-09-24 2학기 진행 계획</title><link href="http://localhost:4000/ict-ison-semester2-plan" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-09-24 2학기 진행 계획" /><published>2021-09-24T08:11:00+09:00</published><updated>2021-09-24T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-semester2-plan</id><content type="html" xml:base="http://localhost:4000/ict-ison-semester2-plan">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;이 후, 해당 방식을 드론 비행에 적용할 예정이다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting_1 2021-03-24 ISON Meeting_2 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final 2021-09-24 ISON Semester2 Plan 2021-10-07 ISON Motor Controller Implementaion 2021-10-26 ISON Meeting_3 2021-10-26 ISON Nonlinear Disturbance Observer</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-09-24 2학기 진행 계획</title><link href="http://localhost:4000/ict-ison-semester2-plan" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-09-24 2학기 진행 계획" /><published>2021-09-24T08:11:00+09:00</published><updated>2021-09-24T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-semester2-plan</id><content type="html" xml:base="http://localhost:4000/ict-ison-semester2-plan">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting_2&lt;/a&gt;&lt;/li&gt;
@@ -81,6 +137,7 @@
     &lt;li&gt;&lt;a href=&quot;./ict-ison-semester2-plan&quot;&gt;2021-09-24 ISON Semester2 Plan&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-motor-ctrlr&quot;&gt;2021-10-07 ISON Motor Controller Implementaion&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_3&quot;&gt;2021-10-26 ISON Meeting_3&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ndob&quot;&gt;2021-10-26 ISON Nonlinear Disturbance Observer&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;하계 인턴쉽 최종 보고와 함께 2학기 진행 방향에 대해서 멘토님과 논의하였으며, 주제는 &lt;code class=&quot;highlighter-rouge&quot;&gt;Precision landing을 위한 robust control approaches&lt;/code&gt;로 설정하였다.&lt;/p&gt;
@@ -108,7 +165,7 @@
     [Concept Diagram of Incremental Nonlinear Dynamic Inversion for a quadcopter]
 &lt;/p&gt;
 
-&lt;p&gt;앞으로의 진행 방향은 해당 알고리즘을 실제로 구현하고 고전적인 PD 제어기와 성능을 비교할 예정이다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting_1 2021-03-24 ISON Meeting_2 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final 2021-09-24 ISON Semester2 Plan 2021-10-07 ISON Motor Controller Implementaion 2021-10-26 ISON Meeting_3</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-08-25 Internship 관련 최종 미팅</title><link href="http://localhost:4000/ict-ison-internship2" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-08-25 Internship 관련 최종 미팅" /><published>2021-08-26T08:11:00+09:00</published><updated>2021-08-26T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-internship2</id><content type="html" xml:base="http://localhost:4000/ict-ison-internship2">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;앞으로의 진행 방향은 해당 알고리즘을 실제로 구현하고 고전적인 PD 제어기와 성능을 비교할 예정이다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting_1 2021-03-24 ISON Meeting_2 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final 2021-09-24 ISON Semester2 Plan 2021-10-07 ISON Motor Controller Implementaion 2021-10-26 ISON Meeting_3 2021-10-26 ISON Nonlinear Disturbance Observer</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-08-25 Internship 관련 최종 미팅</title><link href="http://localhost:4000/ict-ison-internship2" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-08-25 Internship 관련 최종 미팅" /><published>2021-08-26T08:11:00+09:00</published><updated>2021-08-26T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-internship2</id><content type="html" xml:base="http://localhost:4000/ict-ison-internship2">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting_2&lt;/a&gt;&lt;/li&gt;
@@ -122,6 +179,7 @@
     &lt;li&gt;&lt;a href=&quot;./ict-ison-semester2-plan&quot;&gt;2021-09-24 ISON Semester2 Plan&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-motor-ctrlr&quot;&gt;2021-10-07 ISON Motor Controller Implementaion&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_3&quot;&gt;2021-10-26 ISON Meeting_3&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ndob&quot;&gt;2021-10-26 ISON Nonlinear Disturbance Observer&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;혁신인재 4.0 하계 인턴쉽 관련하여 결과물에 대한 최종 발표를 이스온 본사에서 진행하였다.&lt;/p&gt;
@@ -180,7 +238,7 @@ v_{h} \equiv v_{i} = \sqrt{\frac{T}{2\rho A}} = \sqrt{\left(\frac{T}{A}\right)\f
 
 &lt;p align=&quot;center&quot;&gt;
     &lt;img src=&quot;assets/built/images/Internship/Internship_final.jpg&quot; alt=&quot;Summary&quot; /&gt;
-&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting_1 2021-03-24 ISON Meeting_2 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final 2021-09-24 ISON Semester2 Plan 2021-10-07 ISON Motor Controller Implementaion 2021-10-26 ISON Meeting_3</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-07-23 Internship 관련 미팅</title><link href="http://localhost:4000/ict-ison-internship" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-07-23 Internship 관련 미팅" /><published>2021-07-23T08:11:00+09:00</published><updated>2021-07-23T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-internship</id><content type="html" xml:base="http://localhost:4000/ict-ison-internship">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting_1 2021-03-24 ISON Meeting_2 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final 2021-09-24 ISON Semester2 Plan 2021-10-07 ISON Motor Controller Implementaion 2021-10-26 ISON Meeting_3 2021-10-26 ISON Nonlinear Disturbance Observer</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-07-23 Internship 관련 미팅</title><link href="http://localhost:4000/ict-ison-internship" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-07-23 Internship 관련 미팅" /><published>2021-07-23T08:11:00+09:00</published><updated>2021-07-23T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-internship</id><content type="html" xml:base="http://localhost:4000/ict-ison-internship">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting_2&lt;/a&gt;&lt;/li&gt;
@@ -194,6 +252,7 @@ v_{h} \equiv v_{i} = \sqrt{\frac{T}{2\rho A}} = \sqrt{\left(\frac{T}{A}\right)\f
     &lt;li&gt;&lt;a href=&quot;./ict-ison-semester2-plan&quot;&gt;2021-09-24 ISON Semester2 Plan&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-motor-ctrlr&quot;&gt;2021-10-07 ISON Motor Controller Implementaion&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_3&quot;&gt;2021-10-26 ISON Meeting_3&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ndob&quot;&gt;2021-10-26 ISON Nonlinear Disturbance Observer&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;혁신인재 4.0 하계 인턴쉽 관련한 미팅을 이스온 본사에서 진행하였다.&lt;/p&gt;
@@ -219,7 +278,7 @@ v_{h} \equiv v_{i} = \sqrt{\frac{T}{2\rho A}} = \sqrt{\left(\frac{T}{A}\right)\f
 
 &lt;p align=&quot;center&quot;&gt;
     &lt;img src=&quot;assets/built/images/Internship/Internship.jpg&quot; alt=&quot;Summary&quot; /&gt;
-&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting_1 2021-03-24 ISON Meeting_2 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final 2021-09-24 ISON Semester2 Plan 2021-10-07 ISON Motor Controller Implementaion 2021-10-26 ISON Meeting_3</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (2)</title><link href="http://localhost:4000/ict-ison-ctrlr_2" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (2)" /><published>2021-06-06T08:11:00+09:00</published><updated>2021-06-06T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-ctrlr_2</id><content type="html" xml:base="http://localhost:4000/ict-ison-ctrlr_2">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting_1 2021-03-24 ISON Meeting_2 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final 2021-09-24 ISON Semester2 Plan 2021-10-07 ISON Motor Controller Implementaion 2021-10-26 ISON Meeting_3 2021-10-26 ISON Nonlinear Disturbance Observer</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (2)</title><link href="http://localhost:4000/ict-ison-ctrlr_2" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (2)" /><published>2021-06-06T08:11:00+09:00</published><updated>2021-06-06T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-ctrlr_2</id><content type="html" xml:base="http://localhost:4000/ict-ison-ctrlr_2">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting_2&lt;/a&gt;&lt;/li&gt;
@@ -233,6 +292,7 @@ v_{h} \equiv v_{i} = \sqrt{\frac{T}{2\rho A}} = \sqrt{\left(\frac{T}{A}\right)\f
     &lt;li&gt;&lt;a href=&quot;./ict-ison-semester2-plan&quot;&gt;2021-09-24 ISON Semester2 Plan&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-motor-ctrlr&quot;&gt;2021-10-07 ISON Motor Controller Implementaion&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_3&quot;&gt;2021-10-26 ISON Meeting_3&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ndob&quot;&gt;2021-10-26 ISON Nonlinear Disturbance Observer&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h1 id=&quot;15주차-드론-동역학-및-제어기-설계-2--210524210604&quot;&gt;15주차, 드론 동역학 및 제어기 설계 2  (21.05.24~21.06.04)&lt;/h1&gt;
@@ -349,7 +409,7 @@ v_{h} \equiv v_{i} = \sqrt{\frac{T}{2\rho A}} = \sqrt{\left(\frac{T}{A}\right)\f
 
 &lt;p&gt;Euler Angle&lt;/p&gt;
 
-&lt;p&gt;영상과 Position, Euler Angle을 나타낸 플랏에도 알 수 있듯이 Reference value에 잘 수렴하고, 드론이 안정적으로 동작하는 것을 확인할 수 있다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting_1 2021-03-24 ISON Meeting_2 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final 2021-09-24 ISON Semester2 Plan 2021-10-07 ISON Motor Controller Implementaion 2021-10-26 ISON Meeting_3</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (1)</title><link href="http://localhost:4000/ict-ison-ctrlr_1" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (1)" /><published>2021-05-11T08:11:00+09:00</published><updated>2021-05-11T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-ctrlr_1</id><content type="html" xml:base="http://localhost:4000/ict-ison-ctrlr_1">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;영상과 Position, Euler Angle을 나타낸 플랏에도 알 수 있듯이 Reference value에 잘 수렴하고, 드론이 안정적으로 동작하는 것을 확인할 수 있다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting_1 2021-03-24 ISON Meeting_2 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final 2021-09-24 ISON Semester2 Plan 2021-10-07 ISON Motor Controller Implementaion 2021-10-26 ISON Meeting_3 2021-10-26 ISON Nonlinear Disturbance Observer</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (1)</title><link href="http://localhost:4000/ict-ison-ctrlr_1" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-05-10 Drone Controller Design (1)" /><published>2021-05-11T08:11:00+09:00</published><updated>2021-05-11T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-ctrlr_1</id><content type="html" xml:base="http://localhost:4000/ict-ison-ctrlr_1">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting_2&lt;/a&gt;&lt;/li&gt;
@@ -363,6 +423,7 @@ v_{h} \equiv v_{i} = \sqrt{\frac{T}{2\rho A}} = \sqrt{\left(\frac{T}{A}\right)\f
     &lt;li&gt;&lt;a href=&quot;./ict-ison-semester2-plan&quot;&gt;2021-09-24 ISON Semester2 Plan&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-motor-ctrlr&quot;&gt;2021-10-07 ISON Motor Controller Implementaion&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_3&quot;&gt;2021-10-26 ISON Meeting_3&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ndob&quot;&gt;2021-10-26 ISON Nonlinear Disturbance Observer&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h1 id=&quot;13주차-드론-동역학-및-제어기-설계-1-210510210521&quot;&gt;13주차, 드론 동역학 및 제어기 설계 1 (21.05.10~21.05.21)&lt;/h1&gt;
@@ -750,7 +811,7 @@ I =  {\begin{bmatrix}{I_{xx}}&amp;0&amp;0\\0&amp;{I_{zz}}&amp;0\\0&amp;0&amp;{I_
            &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;           &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;  
     &lt;span class=&quot;n&quot;&gt;R&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;R_z&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;R_y&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;R_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting_1 2021-03-24 ISON Meeting_2 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final 2021-09-24 ISON Semester2 Plan 2021-10-07 ISON Motor Controller Implementaion 2021-10-26 ISON Meeting_3</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-26 Drone System Implementation</title><link href="http://localhost:4000/ict-ison-imp" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-26 Drone System Implementation" /><published>2021-04-27T08:11:00+09:00</published><updated>2021-04-27T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-imp</id><content type="html" xml:base="http://localhost:4000/ict-ison-imp">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting_1 2021-03-24 ISON Meeting_2 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final 2021-09-24 ISON Semester2 Plan 2021-10-07 ISON Motor Controller Implementaion 2021-10-26 ISON Meeting_3 2021-10-26 ISON Nonlinear Disturbance Observer</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-26 Drone System Implementation</title><link href="http://localhost:4000/ict-ison-imp" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-26 Drone System Implementation" /><published>2021-04-27T08:11:00+09:00</published><updated>2021-04-27T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-imp</id><content type="html" xml:base="http://localhost:4000/ict-ison-imp">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting_2&lt;/a&gt;&lt;/li&gt;
@@ -764,6 +825,7 @@ I =  {\begin{bmatrix}{I_{xx}}&amp;0&amp;0\\0&amp;{I_{zz}}&amp;0\\0&amp;0&amp;{I_
     &lt;li&gt;&lt;a href=&quot;./ict-ison-semester2-plan&quot;&gt;2021-09-24 ISON Semester2 Plan&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-motor-ctrlr&quot;&gt;2021-10-07 ISON Motor Controller Implementaion&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_3&quot;&gt;2021-10-26 ISON Meeting_3&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ndob&quot;&gt;2021-10-26 ISON Nonlinear Disturbance Observer&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h1 id=&quot;11주차-드론-제작210426210507&quot;&gt;11주차, 드론 제작(21.04.26~21.05.07)&lt;/h1&gt;
@@ -1050,7 +1112,7 @@ I =  {\begin{bmatrix}{I_{xx}}&amp;0&amp;0\\0&amp;{I_{zz}}&amp;0\\0&amp;0&amp;{I_
 
 &lt;p align=&quot;center&quot;&gt;
     &lt;img src=&quot;assets/built/images/Imp/Untitled 25.png&quot; alt=&quot;untitled&quot; /&gt;
-&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting_1 2021-03-24 ISON Meeting_2 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final 2021-09-24 ISON Semester2 Plan 2021-10-07 ISON Motor Controller Implementaion 2021-10-26 ISON Meeting_3</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_2</title><link href="http://localhost:4000/ict-ison-eskf2" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_2" /><published>2021-04-21T08:11:00+09:00</published><updated>2021-04-21T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-eskf2</id><content type="html" xml:base="http://localhost:4000/ict-ison-eskf2">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
+&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting_1 2021-03-24 ISON Meeting_2 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final 2021-09-24 ISON Semester2 Plan 2021-10-07 ISON Motor Controller Implementaion 2021-10-26 ISON Meeting_3 2021-10-26 ISON Nonlinear Disturbance Observer</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_2</title><link href="http://localhost:4000/ict-ison-eskf2" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_2" /><published>2021-04-21T08:11:00+09:00</published><updated>2021-04-21T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-eskf2</id><content type="html" xml:base="http://localhost:4000/ict-ison-eskf2">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
 &lt;ul class=&quot;table-of-contents-list&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting_1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting_2&lt;/a&gt;&lt;/li&gt;
@@ -1064,6 +1126,7 @@ I =  {\begin{bmatrix}{I_{xx}}&amp;0&amp;0\\0&amp;{I_{zz}}&amp;0\\0&amp;0&amp;{I_
     &lt;li&gt;&lt;a href=&quot;./ict-ison-semester2-plan&quot;&gt;2021-09-24 ISON Semester2 Plan&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-motor-ctrlr&quot;&gt;2021-10-07 ISON Motor Controller Implementaion&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_3&quot;&gt;2021-10-26 ISON Meeting_3&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;./ict-ison-ndob&quot;&gt;2021-10-26 ISON Nonlinear Disturbance Observer&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;본 포스팅에서는 지난 시간에 정리한 &lt;code class=&quot;highlighter-rouge&quot;&gt;Error-State Kalman Filter&lt;/code&gt;의 process 및 measurement noise matrices 계수 설정, 구현 코드 관련된 내용을 작성하고자 한다.&lt;/p&gt;
@@ -1343,362 +1406,4 @@ where,&lt;/p&gt;
 //	ins-&amp;gt;x[6] = ins-&amp;gt;x[6]/qNorm; ins-&amp;gt;x[7] = ins-&amp;gt;x[7]/qNorm; ins-&amp;gt;x[8] = ins-&amp;gt;x[8]/qNorm; ins-&amp;gt;x[9] = ins-&amp;gt;x[9]/qNorm;
 &lt;/span&gt;	&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting_1 2021-03-24 ISON Meeting_2 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final 2021-09-24 ISON Semester2 Plan 2021-10-07 ISON Motor Controller Implementaion 2021-10-26 ISON Meeting_3</summary></entry><entry><title type="html">POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_1</title><link href="http://localhost:4000/ict-ison-eskf1" rel="alternate" type="text/html" title="POSTECH ICT V+ 4.0 매칭 기업 ISON 2021-04-07 Navigation System Implementation using Error-State Kalman Filter_1" /><published>2021-04-07T08:11:00+09:00</published><updated>2021-04-07T08:11:00+09:00</updated><id>http://localhost:4000/ict-ison-eskf1</id><content type="html" xml:base="http://localhost:4000/ict-ison-eskf1">&lt;p&gt;&lt;span class=&quot;table-of-contents-list&quot;&gt;ISON 개발 관련 목차 &lt;/span&gt;&lt;/p&gt;
-&lt;ul class=&quot;table-of-contents-list&quot;&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_1&quot;&gt;2021-03-02 ISON Meeting_1&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_2&quot;&gt;2021-03-24 ISON Meeting_2&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf1&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_1&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-eskf2&quot;&gt;2021-04-07 ISON Development: Error-State Kalman Filter_2&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-imp&quot;&gt;2021-04-26 ISON Development: Drone System Implementation&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_1&quot;&gt;2021-05-10 ISON Development: Drone Control (1)&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-ctrlr_2&quot;&gt;2021-06-10 ISON Development: Drone Control (2)&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-internship&quot;&gt;2021-07-23 ISON Internship&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-internship2&quot;&gt;2021-08-25 ISON Internship final&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-semester2-plan&quot;&gt;2021-09-24 ISON Semester2 Plan&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-motor-ctrlr&quot;&gt;2021-10-07 ISON Motor Controller Implementaion&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;./ict-ison-meeting_3&quot;&gt;2021-10-26 ISON Meeting_3&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;2021-03-24 ISON Meeting 포스팅에 게재했듯이, 혁신인재 4.0 이스온팀의 개발 목표는 &lt;code class=&quot;highlighter-rouge&quot;&gt;광학 측위 시스템 기반 precision landing&lt;/code&gt; 기법을 연구하는 것이다. 연구를 위한 드론 기체 제작을 위해 주문한 부품 중 일부가 해외 배송 건으로, 도착하는데 시간이 걸리기 때문에 기체 제작에 앞서 세부 개발 목표 중 하나인 광학 측위 시스템을 활용한 navigation system 개발을 진행하도록 한다. Navigation system 알고리즘은 IMU 정보로 부터 계산한 측위 정보와 광학 측위 시스템을 기반으로 측정한 측위 정보를 error-state Kalman filter (ESKF)를 활용하여 fusion하는 형태로 구현한다. 해당 알고리즘은 다음의 논문을 참고하여 구현되었다: &lt;a href=&quot;http://www.iri.upc.edu/people/jsola/JoanSola/objectes/notes/kinematics.pdf&quot;&gt;Quaternion kinematics for the error-state Kalman filter&lt;/a&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;본 포스팅에서 ESKF를 설명하기 위해서 true state, nominal state, 그리고 error state 라는 용어를 사용한다. True state는 추정하고자 하는 실제 state를 의미하며, nominal state는 IMU measurement 정보와 system kinematics를 활용하여 예측한 state를 의미한다. Error state는 ESKF에서 추정하는 state로 true state와 nominal state의 차이를 나타낸다.&lt;/p&gt;
-
-&lt;p&gt;위에서 간략히 언급한 바와 같이, 알고리즘은 다음과 같은 형태로 구성된다.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;IMU measurement와 system kinematics를 활용한 nominal state prediction step&lt;/li&gt;
-  &lt;li&gt;광학 측위 시스템을 통해 측정된 드론의 position 및 attitude 정보를 이용한 error state correction step&lt;/li&gt;
-  &lt;li&gt;추정된 error state를 nominal state에 injection하여 true state를 추정하고, ESKF를 reset하는 step&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;글의 목차는 다음과 같이 구성한다.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Nomenclature&lt;/li&gt;
-  &lt;li&gt;ESKF Prediction step&lt;/li&gt;
-  &lt;li&gt;ESKF Correction step&lt;/li&gt;
-  &lt;li&gt;ESKF Error-state injection and reset&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;hr /&gt;
-
-&lt;h1 id=&quot;1-nomancalture&quot;&gt;&lt;strong&gt;1. Nomancalture&lt;/strong&gt;&lt;/h1&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Magnitude&lt;/th&gt;
-      &lt;th&gt;True&lt;/th&gt;
-      &lt;th&gt;Nominal&lt;/th&gt;
-      &lt;th&gt;Error&lt;/th&gt;
-      &lt;th&gt;Composition&lt;/th&gt;
-      &lt;th&gt;Measure&lt;/th&gt;
-      &lt;th&gt;Noise&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Full state&lt;/td&gt;
-      &lt;td&gt;$x_{t}$&lt;/td&gt;
-      &lt;td&gt;$x$&lt;/td&gt;
-      &lt;td&gt;$\delta x$&lt;/td&gt;
-      &lt;td&gt;$x_{t} = x \oplus \delta x$&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Position&lt;/td&gt;
-      &lt;td&gt;$p_{t}$&lt;/td&gt;
-      &lt;td&gt;$p$&lt;/td&gt;
-      &lt;td&gt;$\delta p$&lt;/td&gt;
-      &lt;td&gt;$p_{t} = p + \delta p$&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Velocity&lt;/td&gt;
-      &lt;td&gt;$v_{t}$&lt;/td&gt;
-      &lt;td&gt;$v$&lt;/td&gt;
-      &lt;td&gt;$\delta v$&lt;/td&gt;
-      &lt;td&gt;$v_{t} = v + \delta v$&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Quaternion&lt;/td&gt;
-      &lt;td&gt;$q_{t}$&lt;/td&gt;
-      &lt;td&gt;$q$&lt;/td&gt;
-      &lt;td&gt;$\delta q$&lt;/td&gt;
-      &lt;td&gt;$q_{t} = q \otimes \delta q$&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Angles vector&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-      &lt;td&gt;$\delta \theta $&lt;/td&gt;
-      &lt;td&gt;$\delta q = e^{\frac{\delta \theta}{2}}$&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Accelerometer bias&lt;/td&gt;
-      &lt;td&gt;$a_{bt} $&lt;/td&gt;
-      &lt;td&gt;$a_{b}$&lt;/td&gt;
-      &lt;td&gt;$\delta a_{b}$&lt;/td&gt;
-      &lt;td&gt;$a_{bt} = a_{b} + \delta a_{b}$&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-      &lt;td&gt;$a_{w}$&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Gyrometer bias&lt;/td&gt;
-      &lt;td&gt;$\omega_{bt}$&lt;/td&gt;
-      &lt;td&gt;$\omega_{b}$&lt;/td&gt;
-      &lt;td&gt;$\delta \omega_{b}$&lt;/td&gt;
-      &lt;td&gt;$\omega_{bt} = \omega_{b} + \delta \omega_{b}$&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-      &lt;td&gt;$\omega_{w}$&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Gravity vector&lt;/td&gt;
-      &lt;td&gt;$g_{t}$&lt;/td&gt;
-      &lt;td&gt;$g$&lt;/td&gt;
-      &lt;td&gt;$\delta g$&lt;/td&gt;
-      &lt;td&gt;$g_t = g + \delta g$&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Acceleration&lt;/td&gt;
-      &lt;td&gt;$a_{t}$&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-      &lt;td&gt;$a_{m}$&lt;/td&gt;
-      &lt;td&gt;$a_{n}$&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Angular rate&lt;/td&gt;
-      &lt;td&gt;$\omega_{t}$&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-      &lt;td&gt;$\omega_{m}$&lt;/td&gt;
-      &lt;td&gt;$\omega_{n}$&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;단, $a_{t}$는 inertial frame 기준의 가속도를 나타내며,measured acceleration $a_{m}$은 가속도계에서 측정하는 값이므로 가속도계의 좌표계를 의미한다. 운용하고자 하는 가속도계는 드론 기체에 부착되어 있으므로, 드론 기체에 부착된 body frame 기준의 가속도를 나타낸다고 할 수 있다. $\oplus$는 generic composition을 의미한다. $\otimes$는 quaternion product를 의미한다.&lt;/p&gt;
-
-&lt;h1 id=&quot;2-prediction-step&quot;&gt;&lt;strong&gt;2. Prediction step&lt;/strong&gt;&lt;/h1&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;the-nominal-state-kinematics&quot;&gt;The nominal state kinematics&lt;/h4&gt;
-&lt;p&gt;Nominal state의 differences equations는 아래와 같이 나타낼 수 있다.&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align} 
-        \begin{split}
-            p &amp;\leftarrow p + v\triangle t + \frac{1}{2}\left(R\left(a_{m} - a_{b}\right) + g\right)\triangle t^{2} \\
-            v &amp;\leftarrow v + \left(R\left(a_{m} - a_{b}\right) + g\right)\triangle t \\
-            q &amp;\leftarrow q \otimes q\{(\omega_{m} - \omega_{b})\triangle t\} \\
-            a_{b} &amp;\leftarrow a_{b} \\
-            \omega_{b} &amp;\leftarrow \omega_{b} \\
-            g &amp;\leftarrow g
-        \end{split} 
-    \end{align} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;이 때, $x\leftarrow(x, \cdot)$은 $x_{k+1} = f(x_{k}, \cdot_{k})$와 같은 sequence update를 나타내며, $q{ v} $는 rotation $v$를 의미하는 quaternion이다.&lt;/p&gt;
-
-&lt;h4 id=&quot;the-error-state-kinematics&quot;&gt;The error-state kinematics&lt;/h4&gt;
-&lt;p&gt;True state kinematics 및 nominal state kinematics를 적절히 변형하여 다음과 같은 error-state kinematics를 얻을 수 있다.&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
-        \begin{split}
-            \delta p &amp;\leftarrow \delta p + \delta v \triangle t \\
-            \delta v &amp;\leftarrow \delta v + (-R[ a_{m}-a_{b}]_{\times} \delta \theta - R\delta a_{b} + \delta g)\delta t + v_{i}   \\
-            \delta \theta &amp;\leftarrow R^{T}\{ (\omega_{m} - \omega_{b}\triangle t) \}\delta \theta - \delta \omega_{b} \triangle t + \theta_{i}  \\
-            \delta a_{b} &amp;\leftarrow \delta a_{b} + a_{i}    \\
-            \delta \omega_{b} &amp;\leftarrow \delta \omega_{b} + \omega_{i} \\
-            \delta g &amp;\leftarrow \delta g
-        \end{split}
-    \end{align} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;이 때, $v_{i}, \theta_{i}, a_{i}$ 그리고 $\omega_{i}$는 각각 velocity, orientation 그리고 bias estimates에 적용되는 random impulses로 white Gaussian process로 modeling 되었다. 각 값의 평균은 0이고 covariance matrices는 sensor noise 및 bias process noise ($a_{n}, \omega_{n}, a_{omega}$ 그리고 $\omega_{w}$)의 적분을 통해 구할 수 있다.&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
-        \begin{split}
-            V_{i} &amp;= \sigma_{a_{n}}^2 \triangle t^2 I_{3\times 3} \\
-            \Theta_{i} &amp;= \sigma_{\omega_{n}}^2 \triangle t^2 I_{3\times 3} \\
-            A_{i} &amp;= \sigma_{a_{\omega}}^2 \triangle t I_{3\times 3} \\
-            \Omega_{i} &amp;= \omega_{\omega_{w}}^2 \triangle t I_{3\times 3}
-            \label{eq:Cov_Mat_Elem}
-        \end{split}
-    \end{align} %]]&gt;&lt;/script&gt;
-
-&lt;h4 id=&quot;the-erorr-state-jacobian-and-perturbation-matrices&quot;&gt;The erorr-state Jacobian and perturbation matrices&lt;/h4&gt;
-
-&lt;p&gt;Error-state kinematics는 다음과 같이 선형 form으로 기술할 수 있다.&lt;/p&gt;
-
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;\begin{align}
-        \begin{split}
-            \delta x \leftarrow F_{x}(x, u_{m})\cdot \delta x + F_{i}\cdot i
-        \end{split}
-    \end{align}&lt;/script&gt;
-where,&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{align*}
-        \begin{split}
-            u_{m} = \left[\begin{array}{cc}
-            a_{m} \\
-            \omega_{m} \end{array}\right], 
-            i = \left[\begin{array}{cccc}
-            v_{i} \\
-            \theta_{i} \\
-            a_{i} \\
-            \omega_{i}
-            \end{array}\right].
-        \end{split}
-    \end{align*}&lt;/script&gt;
-
-&lt;p&gt;ESKF의 prediction 수식은 위의 관계식들을 이용하여 다음과 같이 기술할 수 있다.&lt;/p&gt;
-
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;% &lt;![CDATA[
-\begin{align}
-        \begin{split}
-            \hat{\delta x} &amp;\leftarrow F_{x}\cdot \hat{\delta x} \\
-            P &amp;\leftarrow F_{x}PF_{x}^{T}+F_{i}Q_{i}F_{i}^{T}
-        \end{split}
-    \end{align} %]]&gt;&lt;/script&gt;
-이 때, $\delta x$는 mean이 $\hat{\delta x}$이고 공분산이 $P$인 값이 된다. 또한 $F_{x}, F_{i}$는 각각 error-state kinematics와 관련된 Jacobian matrix이며, $Q_{i}$는 수식 (3)을 element로 하는 process noise matirx를 의미한다.&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
-        \begin{split}
-            F_{x}=\frac{\partial f}{\partial \delta x}, F_{i}=\frac{\partial f}{\partial i}, 
-            Q_{i} = \left[\begin{array}{cccccccccccccccc}
-            V_i &amp; 0 &amp; 0 &amp; 0 \\
-            0 &amp; \Theta_i &amp; 0 &amp; 0 \\
-            0 &amp; 0 &amp; A_{i} &amp; 0 \\
-            0 &amp; 0 &amp; 0 &amp; \Omega_{i}
-            \end{array}\right]
-        \end{split}
-    \end{align} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;여기서 주목할 점은 error-state의 초깃값이 0이면 error-state는 항상 0으로 유지된다는 것이다. ESKF의 알고리즘 상 error-state는 correction을 통해서 추정되고 nominal state에 injection 된 후, 0으로 reset 되기 때문에 항상 0으로 유지되기 때문에 알고리즘을 구현할 때 따로 작성할 필요가 없다.&lt;/p&gt;
-
-&lt;h1 id=&quot;3-correction-step&quot;&gt;&lt;strong&gt;3. Correction step&lt;/strong&gt;&lt;/h1&gt;
-
-&lt;p&gt;광학 측위 시스템 기반의 측정값을 이용하여 error-state를 추정하고 이를 nominal state에 injection하여 true state를 추정한다. 광학 측위 시스템을 통해서 얻을 수 있는 measurements는 시스템의 position 및 attitude에 대한 quaternion vector이다.&lt;/p&gt;
-
-&lt;h4 id=&quot;observation-of-the-error-state-via-filter-correction&quot;&gt;Observation of the error state via filter correction&lt;/h4&gt;
-&lt;p&gt;Measurements가 아래와 같이 state-dependent function과 zero mean white Gaussian noise의 composition으로 나타난다고 가정하자.&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{align}
-    \begin{split}
-        y = h(x_{t}) + v
-    \end{split}
-\end{align}&lt;/script&gt;
-
-&lt;p&gt;본 과제에서 활용하는 광학 측위 시스템의 경우 inertial frame 기준의 드론 position과 attitude를 측정하기 때문에 measurement function은 $h(x_{t}) = \left[\begin{array}{cc} p_{t} \ q_{t}\end{array}\right]^T$이며, V는 measurement noise covariance를 의미한다.&lt;/p&gt;
-
-&lt;p&gt;Error-state에 대한 estimation 및 error covariance matrix는 다음과 같이 갱신한다.
-&lt;script type=&quot;math/tex&quot;&gt;% &lt;![CDATA[
-\begin{align}
-    \begin{split}
-        K &amp;= PH^T (HPH^T + V)^{-1}   \\
-        \hat{\delta x} &amp;\leftarrow K(y - h(\hat{x_{t}})) \\
-        P &amp;\leftarrow (I-KH)P
-    \end{split}
-\end{align} %]]&gt;&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;이 때, $H$는 $h_{x_{t}}$에 대한 Jacobian matrix를 의미한다.&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{align}
-    \begin{split}
-        H \equiv \left. \frac{\partial h}{\partial \delta x} \right\rvert_{x}
-    \end{split}
-\end{align}&lt;/script&gt;
-
-&lt;h4 id=&quot;jacobian-computation-for-the-filter-correction&quot;&gt;Jacobian computation for the filter correction&lt;/h4&gt;
-&lt;p&gt;Jacobian matrix $H$는 아래와 같이 chain rule을 활용하여 구할 수 있다.&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{align}
-    \begin{split}
-        H \triangleq \left. \frac{\partial h}{\partial \delta x} \right\rvert_{x} = \left. \frac{\partial h}{\partial x_{t}} \right\rvert_{x} \left. \frac{\partial x_{t}}{\partial \delta x} \right\rvert_{x} = H_{x}X_{\delta x}
-    \end{split}
-\end{align}&lt;/script&gt;
-
-&lt;p&gt;Measurements는 position $p$와 quaternion $q$이기 때문에, $H_{x}$를 구하는 것은 trivial하다. $X_{\delta x}$는 정의에 따라 다음과 같이 얻을 수 있다.&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
-    \begin{split}
-        X_{\delta x} \triangleq \left. \frac{\partial x_{t}}{\partial \delta x} \right\rvert_{x} = \left[\begin{array}{ccccccccc} 
-        I_{6\times 6} &amp; 0 &amp; 0 \\
-        0 &amp; Q_{\delta \theta} &amp; 0 \\
-        0 &amp; 0 &amp; I_{6\times 6} \end{array}\right]
-    \end{split}
-\end{align} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;이 때, $Q_{\delta \theta} = \partial(q\otimes \delta q) / \partial \delta \theta$를 의미하며, $\delta \theta$가 매우 작다고 가정하면 다음과 같이 구할 수 있다.&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
-    \begin{split}
-        Q_{\delta \theta} = \frac{1}{2} \left[\begin{array}{cccccccccccc}
-        -q_{x} &amp; -q_{y} &amp; -q_{z} \\
-        q_{w} &amp; -q_{z} &amp; q_{y} \\
-        q_{z} &amp; q_{w} &amp; -q_{x} \\
-        -q_{y} &amp; q_{x} &amp; q_{w} \end{array}\right]
-    \end{split}
-\end{align} %]]&gt;&lt;/script&gt;
-
-&lt;h4 id=&quot;injection-of-the-observed-error-into-the-nominal-state&quot;&gt;Injection of the observed error into the nominal state&lt;/h4&gt;
-&lt;p&gt;Nominal state는 estimated error-state를 이용하여 update할 수 있다.&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{align}
-    \begin{split}
-        p \leftarrow p + \hat{\delta p} \\
-        v \leftarrow v + \hat{\delta v} \\
-        q \leftarrow q \otimes q\{\hat{\delta \theta}\}  \\
-        a_{b} \leftarrow a_{b} + \hat{\delta a_{b}} \\
-        \omega_{b} \leftarrow \omega_{b} + \hat{\delta \omega_{b}}  \\
-        g \leftarrow g + \hat{\delta g}
-    \end{split}
-\end{align}&lt;/script&gt;
-
-&lt;h1 id=&quot;4-eskf-reset&quot;&gt;&lt;strong&gt;4. ESKF reset&lt;/strong&gt;&lt;/h1&gt;
-&lt;p&gt;Error state의 초기화는 다음과 같은 형태로 이루어진다.&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{align}
-    \begin{split}
-        \delta x = \delta x \ominus \hat{\delta x}
-    \end{split}
-\end{align}&lt;/script&gt;
-
-&lt;p&gt;따라서 이에 대한 ESKF reset operation은 다음과 같이 나타난다.&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{align}
-    \begin{split}
-        \hat{\delta x} \leftarrow 0 \\
-        P \leftarrow GPG^T
-    \end{split}
-\end{align}&lt;/script&gt;
-
-&lt;p&gt;이 때, G는 아래와 같이 정의된 Jacobian matrix를 의미한다.&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{align}
-    \begin{split}
-        G \triangleq \left. \frac{\partial g}{\partial \delta x} \right\rvert_{\hat{\delta x}}
-    \end{split}
-\end{align}&lt;/script&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;다음 포스팅은 해당 알고리즘에 대한 c 코드 작성에 대한 내용을 담을 예정이다. 이 후, 드론 기체 제작에 필요한 부품들이 모두 도착하면 기체를 제작하고 알고리즘 검증과 관련된 내용을 진행하도록 한다.&lt;/p&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting_1 2021-03-24 ISON Meeting_2 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final 2021-09-24 ISON Semester2 Plan 2021-10-07 ISON Motor Controller Implementaion 2021-10-26 ISON Meeting_3</summary></entry></feed>
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>ChangHyeon Lee</name></author><category term="ict" /><summary type="html">ISON 개발 관련 목차 2021-03-02 ISON Meeting_1 2021-03-24 ISON Meeting_2 2021-04-07 ISON Development: Error-State Kalman Filter_1 2021-04-07 ISON Development: Error-State Kalman Filter_2 2021-04-26 ISON Development: Drone System Implementation 2021-05-10 ISON Development: Drone Control (1) 2021-06-10 ISON Development: Drone Control (2) 2021-07-23 ISON Internship 2021-08-25 ISON Internship final 2021-09-24 ISON Semester2 Plan 2021-10-07 ISON Motor Controller Implementaion 2021-10-26 ISON Meeting_3 2021-10-26 ISON Nonlinear Disturbance Observer</summary></entry></feed>
